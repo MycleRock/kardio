@@ -1675,6 +1675,13 @@ class Fusion_Images {
 					} elseif ( 4 === count( $viewbox ) ) {
 						$image[2] = (int) $viewbox[3];
 					}
+
+					if ( isset( $image[1] ) && isset( $image[2] ) ) {
+						$metadata           = wp_get_attachment_metadata( $attachment_id );
+						$metadata['width']  = $image[1];
+						$metadata['height'] = $image[2];
+						wp_update_attachment_metadata( $attachment_id, $metadata );
+					}
 				}
 			}
 		}

@@ -153,6 +153,10 @@ function fusion_builder_map( $module ) {
 					$param['dependency'] = $new_dependency;
 				}
 
+				// Allow any color to have dynamic data, unless disabled.
+				if ( ! isset( $param['dynamic_data'] ) && isset( $param['type'] ) && false !== strpos( $param['type'], 'colorpicker' ) ) {
+					$param['dynamic_data'] = true;
+				}
 				// Allow filtering of param dynamic_data.
 				$dynamic_data          = isset( $param['dynamic_data'] ) ? $param['dynamic_data'] : false;
 				$param['dynamic_data'] = apply_filters( 'fusion_builder_param_dynamic_data', $dynamic_data, $shortcode, $param );

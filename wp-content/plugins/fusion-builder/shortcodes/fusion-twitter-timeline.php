@@ -360,7 +360,7 @@ function fusion_twitter_timeline_element() {
 		fusion_builder_frontend_data(
 			'FusionSC_Twitter_Timeline',
 			[
-				'name'         => esc_attr__( 'Twitter Timeline', 'fusion-builder' ),
+				'name'         => esc_attr__( 'X Timeline', 'fusion-builder' ),
 				'shortcode'    => 'fusion_twitter_timeline',
 				'icon'         => 'fusiona-twtiter-feed',
 				'subparam_map' => [
@@ -372,15 +372,15 @@ function fusion_twitter_timeline_element() {
 				'params'       => [
 					[
 						'type'        => 'textfield',
-						'heading'     => esc_attr__( 'Twitter Username', 'fusion-builder' ),
-						'description' => esc_attr__( 'Enter the username of the twitter timeline you want to display.', 'fusion-builder' ),
+						'heading'     => esc_attr__( 'X Username', 'fusion-builder' ),
+						'description' => esc_attr__( 'Enter the username of the X timeline you want to display.', 'fusion-builder' ),
 						'param_name'  => 'username',
 						'value'       => 'Theme_Fusion',
 					],
 					[
 						'type'        => 'dimension',
 						'heading'     => esc_attr__( 'Dimensions', 'fusion-builder' ),
-						'description' => esc_attr__( 'Set the dimensions of the twitter timeline. In pixels.', 'fusion-builder' ),
+						'description' => esc_attr__( 'Set the dimensions of the X timeline. In pixels.', 'fusion-builder' ),
 						'param_name'  => 'dimension',
 						'value'       => [
 							'width'  => '340',

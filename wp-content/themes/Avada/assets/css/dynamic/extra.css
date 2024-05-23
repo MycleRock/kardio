@@ -336,7 +336,7 @@ input.s .placeholder:focus,
 .wpcf7-select-parent .select-arrow {
   font-size: calc((var(--form_text_size)) * 0.75);
 }
-input#s::-moz-placeholder,
+input.s::-moz-placeholder,
 #comment-input input::-moz-placeholder,
 .post-password-form label input[type="password"]::-moz-placeholder,
 #comment-textarea textarea::-moz-placeholder,
@@ -347,7 +347,7 @@ textarea.fusion-form-input::-moz-placeholder,
 .searchform .s::-moz-placeholder {
   color: var(--form_text_color);
 }
-input#s::-webkit-input-placeholder,
+input.s::-webkit-input-placeholder,
 #comment-input input::-webkit-input-placeholder,
 .post-password-form label input[type="password"]::-webkit-input-placeholder,
 #comment-textarea textarea::-webkit-input-placeholder,

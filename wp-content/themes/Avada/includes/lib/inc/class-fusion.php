@@ -313,11 +313,14 @@ class Fusion {
 				$supported_detected[] = $constant;
 			}
 		}
+
 		if ( $supported_detected !== $supported_saved ) {
 			update_option( 'fusion_supported_plugins_active', $supported_detected );
-			return true;
+			$supported_plugins_changed = true;
 		}
-		return false;
+		$supported_plugins_changed = false;
+
+		return apply_filters( 'awb_supported_plugins_changed', $supported_plugins_changed );
 	}
 
 	/**
@@ -468,7 +471,7 @@ class Fusion {
 	public function set_default_teamplte() {
 		global $post;
 
-		if ( 'page' === $post->post_type && '' === $post->page_template && function_exists( 'Avada' ) && '100_width' === Avada()->settings->get( 'page_template' ) ) {
+		if ( isset( $post ) && 'page' === $post->post_type && '' === $post->page_template && function_exists( 'Avada' ) && '100_width' === Avada()->settings->get( 'page_template' ) ) {
 			$post->page_template = '100-width.php';
 		}
 	}

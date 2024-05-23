@@ -507,13 +507,15 @@ if ( fusion_is_element_enabled( 'fusion_login' ) ||
 			 */
 			public function get_recaptcha_field() {
 				ob_start();
-				AWB_Recaptcha_Helper::render_field(
-					[
-						'counter'       => $this->login_counter,
-						'element'       => 'user-login',
-						'wrapper_class' => 'fusion-login-input-wrapper',
-					]
-				);
+
+				if ( class_exists( 'AWB_Google_Recaptcha' ) ) {
+					AWB_Google_Recaptcha::get_instance()->render_field(
+						[
+							'element'       => 'user-login',
+							'wrapper_class' => 'fusion-login-input-wrapper',
+						]
+					);
+				}
 
 				$recaptcha_content = ob_get_clean();
 
@@ -908,13 +910,16 @@ if ( fusion_is_element_enabled( 'fusion_login' ) ||
 			private function process_recaptcha() {
 				$fusion_settings           = awb_get_fusion_settings();
 				$this->recaptcha_has_error = false;
-				if ( $fusion_settings->get( 'recaptcha_login_form' ) && ! isset( $_POST['g-recaptcha-response'] ) && empty( $_POST['g-recaptcha-response'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-					$this->recaptcha_has_error = true;
-				}
-				if ( $fusion_settings->get( 'recaptcha_login_form' ) && ! is_user_logged_in() && isset( $_POST['g-recaptcha-response'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-					$response = AWB_Recaptcha_Helper::verify();
-					if ( is_array( $response ) && $response['has_error'] && $response['message'] ) {
-						$this->recaptcha_has_error = $response['has_error'];
+				if ( $fusion_settings->get( 'recaptcha_login_form' ) ) {
+					if ( ! isset( $_POST['g-recaptcha-response'] ) || empty( $_POST['g-recaptcha-response'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+						$this->recaptcha_has_error = true;
+					}
+
+					if ( ! is_user_logged_in() && isset( $_POST['g-recaptcha-response'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+						$response = class_exists( 'AWB_Google_Recaptcha' ) ? AWB_Google_Recaptcha::get_instance()->verify() : [];
+						if ( is_array( $response ) && $response['has_error'] && $response['message'] ) {
+							$this->recaptcha_has_error = $response['has_error'];
+						}
 					}
 				}
 			}
@@ -1278,12 +1283,6 @@ if ( fusion_is_element_enabled( 'fusion_login' ) ||
 			 * @return void
 			 */
 			public function on_first_render() {
-				$fusion_settings = awb_get_fusion_settings();
-
-				if ( $fusion_settings->get( 'recaptcha_login_form' ) ) :
-					// Add reCAPTCHA script.
-					AWB_Recaptcha_Helper::enqueue_scripts();
-				endif;
 				Fusion_Dynamic_JS::enqueue_script( 'fusion-button' );
 			}
 

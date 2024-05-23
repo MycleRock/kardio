@@ -196,7 +196,7 @@ FusionPageBuilder.options.fusionOptionUpload = {
 					}
 
 					// Set image id.
-					imageIDField = $thisEl.closest( '.fusion-builder-option' ).next().find( '#' + optionName + '_id' );
+					imageIDField = $thisEl.closest( '.fusion-builder-module-settings' ).find( '#' + optionName + '_id' );
 
 					if ( 'element_content' === optionName ) {
 						imageIDField = $thisEl.closest( '.fusion-builder-option' ).next().find( '#image_id' );

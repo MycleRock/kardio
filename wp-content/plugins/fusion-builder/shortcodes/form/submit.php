@@ -272,6 +272,7 @@ function fusion_form_submit() {
 						'states'        => [
 							'hover' => [
 								'label'   => __( 'Hover', 'fusion-builder' ),
+								'default' => $fusion_settings->get( 'button_gradient_top_color_hover' ),
 								'preview' => [
 									'selector' => '.fusion-button',
 									'type'     => 'class',
@@ -299,6 +300,7 @@ function fusion_form_submit() {
 						'states'        => [
 							'hover' => [
 								'label'   => __( 'Hover', 'fusion-builder' ),
+								'default' => $fusion_settings->get( 'button_gradient_bottom_color_hover' ),
 								'preview' => [
 									'selector' => '.fusion-button',
 									'type'     => 'class',
@@ -628,12 +630,13 @@ function fusion_form_submit() {
 						],
 					],
 					[
-						'type'        => 'iconpicker',
-						'heading'     => esc_attr__( 'Icon', 'fusion-builder' ),
-						'param_name'  => 'icon',
-						'value'       => '',
-						'description' => esc_attr__( 'Click an icon to select, click again to deselect.', 'fusion-builder' ),
-						'group'       => esc_attr__( 'Design', 'fusion-builder' ),
+						'type'         => 'iconpicker',
+						'heading'      => esc_attr__( 'Icon', 'fusion-builder' ),
+						'param_name'   => 'icon',
+						'value'        => '',
+						'description'  => esc_attr__( 'Click an icon to select, click again to deselect.', 'fusion-builder' ),
+						'group'        => esc_attr__( 'Design', 'fusion-builder' ),
+						'dynamic_data' => true,
 					],
 					[
 						'type'        => 'radio_button_set',
@@ -688,7 +691,8 @@ function fusion_form_submit() {
 							'icon_slide'      => esc_attr__( 'Icon Slide', 'fusion-builder' ),
 							'icon_position'   => esc_attr__( 'Icon Switch Position', 'fusion-builder' ),
 							'icon_rotate'     => esc_attr__( 'Icon Rotate', 'fusion-builder' ),
-
+							'bg_slide_right'  => esc_attr__( 'Background Slide Right', 'fusion-builder' ),
+							'bg_slide_left'   => esc_attr__( 'Background Slide Left', 'fusion-builder' ),
 						],
 					],
 					'fusion_animation_placeholder' => [

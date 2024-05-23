@@ -318,7 +318,7 @@ class Fusion_Form_Submit {
 			}
 
 			// Make the request.
-			$response = wp_remote_request( $request_url, $request_args );
+			$response = wp_safe_remote_request( $request_url, $request_args );
 
 			if ( ! is_wp_error( $response ) && isset( $response['body'] ) ) {
 				$data['response_body'] = ( is_string( $response['body'] ) ) ? $response['body'] : wp_json_encode( $response['body'] );
@@ -491,6 +491,11 @@ class Fusion_Form_Submit {
 				if ( isset( $notification['email_cc'] ) ) {
 					$additional_emails = explode( "\n", $notification['email_cc'] );
 					foreach ( $additional_emails as $email_cc ) {
+						preg_match( '/\[.+\]/', $email_cc, $matches );
+						if ( isset( $matches[0] ) && isset( $data['data'][ str_replace( [ '[', ']' ], '', $matches[0] ) ] ) ) {
+							$email_cc = $data['data'][ str_replace( [ '[', ']' ], '', $matches[0] ) ];
+						}
+
 						$headers .= 'Cc: ' . $email_cc . "\r\n";
 					}
 				}
@@ -498,6 +503,11 @@ class Fusion_Form_Submit {
 				if ( isset( $notification['email_bcc'] ) ) {
 					$additional_emails = explode( "\n", $notification['email_bcc'] );
 					foreach ( $additional_emails as $email_bcc ) {
+						preg_match( '/\[.+\]/', $email_bcc, $matches );
+						if ( isset( $matches[0] ) && isset( $data['data'][ str_replace( [ '[', ']' ], '', $matches[0] ) ] ) ) {
+							$email_bcc = $data['data'][ str_replace( [ '[', ']' ], '', $matches[0] ) ];
+						}
+
 						$headers .= 'Bcc: ' . $email_bcc . "\r\n";
 					}
 				}
@@ -1063,8 +1073,7 @@ class Fusion_Form_Submit {
 	 * @return void
 	 */
 	private function process_recaptcha() {
-
-		$response = AWB_Recaptcha_Helper::verify();
+		$response = class_exists( 'AWB_Google_Recaptcha' ) ? AWB_Google_Recaptcha::get_instance()->verify() : [];
 		if ( is_array( $response ) && $response['has_error'] && $response['message'] ) {
 			$this->has_error     = $response['has_error'];
 			$this->captcha_error = $response['message'];
@@ -1098,9 +1107,15 @@ class Fusion_Form_Submit {
 		add_filter( 'upload_dir', [ $this, 'custom_upload_dir' ] );
 
 		// Create form directory if not already there.
-		$upload = wp_upload_dir();
+		$upload = wp_upload_dir( null, false );
+
 		if ( ! file_exists( $upload['path'] ) ) {
 			wp_mkdir_p( $upload['path'] );
+
+			$index_file = @fopen( $upload['path'] . '/index.html', 'wb' );
+			if ( $index_file ) {
+				fclose( $index_file );
+			}
 		}
 
 		foreach ( $uploaded_files as $field_name => $uploaded_file ) {

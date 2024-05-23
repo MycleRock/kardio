@@ -495,7 +495,7 @@ class Fusion_Sanitize {
 		$base_font_size_unit   = self::get_unit( $base_font_size );
 		$base_font_size_number = self::number( $base_font_size );
 
-		if ( ! $font_size_number ) {
+		if ( ! $font_size_number && false === strpos( $font_size, '--awb' ) ) {
 			return $font_size;
 		}
 

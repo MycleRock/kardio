@@ -1124,7 +1124,19 @@ if ( ! function_exists( 'fusion_pagination' ) ) {
 			$output .= '<div class="fusion-clearfix"></div>';
 		}
 
-		return $output;
+		/**
+		 * Filter the pagination HTML.
+		 *
+		 * @since 7.11.6
+		 * @param string        $output          The pagination HTML.
+		 * @param string|int    $current_page    The number of the current page.
+		 * @param string|int    $range           How many page numbers to display to either side of the current page.
+		 * @param string|int    $start_range     How many page numbers to display at the start and the end of the pagination.
+		 * @param string|int    $max_pages       Maximum number of pages.
+		 * @param bool          $infinite_scroll Whether we want infinite scroll or not.
+		 * @param bool          $is_element      Whether pagination is definitely only set for a specific element.
+		 */
+		return apply_filters( 'awb_pagination_markup', $output, $current_page, $range, $start_range, $max_pages, $infinite_scroll, $is_element );       
 
 		// Needed for Theme check.
 		ob_start(); // phpcs:ignore Squiz.PHP.NonExecutableCode.Unreachable
@@ -1849,7 +1861,9 @@ if ( ! function_exists( 'awb_get_responsive_type_data' ) ) {
 				$base_font = $font_size;
 			}
 			$line_height = Fusion_Sanitize::convert_font_size_to_px( $line_height, $base_font );
-			$line_height = round( ( $line_height / $responsive_font_size ) * 100 ) / 100;
+			if ( $responsive_font_size ) {
+				$line_height = round( ( $line_height / $responsive_font_size ) * 100 ) / 100;
+			}
 		}
 		$data['line_height'] = 'line-height:' . $line_height . ';';
 

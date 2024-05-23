@@ -353,11 +353,21 @@ body:not(.fusion-builder-live-preview) .fusion-column-inner-bg:hover + .fusion-c
   height: 100%;
   z-index: 1;
 }
+.awb-column__background-slider {
+  border-radius: var(--awb-border-radius);
+}
+.awb-column__background-slider .awb-background-slider {
+  border-radius: inherit;
+  border-width: var(--awb-border-top) var(--awb-border-right) var(--awb-border-bottom) var(--awb-border-left);
+  border-color: var(--awb-border-color);
+  border-style: var(--awb-border-style);
+}
 .awb-column__content {
   z-index: 10;
 }
 .fusion-column-anchor .awb-column__background-slider {
   width: 100%;
+  left: 0;
 }
 .fusion-column-anchor .awb-background-slider {
   position: static;

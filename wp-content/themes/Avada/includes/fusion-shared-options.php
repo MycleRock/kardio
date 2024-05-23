@@ -421,10 +421,10 @@ function avada_add_fb_styling( $css ) {
 			$css['global']['.rtl .fusion-content-widget-area .fusion-tabs-widget .fusion-tabs-nav ul li']['border-left-color'] = 'var(--tabs_bg_color)';
 		}
 
-		$css['global']['.fusion-content-widget-area .fusion-tabs-widget .fusion-tabs-clean .fusion-tabs-nav ul']['border']                = '1px solid var(--tabs_border_color)';
-		$css['global']['.fusion-content-widget-area .fusion-tabs-widget .fusion-tabs-clean .fusion-tabs-nav ul li']['border-right-color'] = 'var(--tabs_border_color)';
+		$css['global']['.fusion-content-widget-area .fusion-tabs-widget .fusion-tabs-clean .fusion-tabs-nav ul']['border']                = '1px solid var(--tabs_border_color,  var(--awb-fusion-border-color))';
+		$css['global']['.fusion-content-widget-area .fusion-tabs-widget .fusion-tabs-clean .fusion-tabs-nav ul li']['border-right-color'] = 'var(--tabs_border_color,  var(--awb-fusion-border-color))';
 		if ( is_rtl() ) {
-			$css['global']['.rtl .fusion-content-widget-area .fusion-tabs-widget .fusion-tabs-clean .fusion-tabs-nav ul li']['border-left-color'] = 'var(--tabs_border_color)';
+			$css['global']['.rtl .fusion-content-widget-area .fusion-tabs-widget .fusion-tabs-clean .fusion-tabs-nav ul li']['border-left-color'] = 'var(--tabs_border_color, var(--awb-fusion-border-color))';
 		}
 
 		$css['global']['.fusion-content-widget-area .fusion-tabs-widget .fusion-tabs-nav ul li a']['border-top-color'] = 'var(--tabs_inactive_color)';
@@ -442,7 +442,7 @@ function avada_add_fb_styling( $css ) {
 			'.fusion-content-widget-area .fusion-tabs-widget .fusion-tabs-classic',
 			'.fusion-content-widget-area .fusion-tabs-widget .fusion-tabs-widget-content .fusion-tabs-widget-items li',
 		];
-		$css['global'][ $dynamic_css_helpers->implode( $elements ) ]['border-color'] = 'var(--tabs_border_color)';
+		$css['global'][ $dynamic_css_helpers->implode( $elements ) ]['border-color'] = 'var(--tabs_border_color,  var(--awb-fusion-border-color))';
 
 		$css['global']['.fusion-secondary-menu .fusion-menu-cart-item img']['border-color'] = 'var(--sep_color)';
 		if ( class_exists( 'WooCommerce' ) ) {

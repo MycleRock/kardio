@@ -533,7 +533,7 @@ if ( ! class_exists( 'Fusion_Column_Element' ) ) {
 				}
 
 				if ( $this->args['background_slider_images'] ) {
-					$output .= '<div class="awb-column__background-slider">' . Fusion_Builder_Background_Slider_Helper::get_element( $this->args, 'column' ) . '</div>';
+					$output .= Fusion_Builder_Background_Slider_Helper::get_element( $this->args, 'column' );
 				}
 
 				$output .= '</' . $tag . '></span>';
@@ -1132,7 +1132,7 @@ if ( ! class_exists( 'Fusion_Column_Element' ) ) {
 			];
 
 			if ( ! empty( $this->args['link'] ) ) {
-				$attr['href'] = $this->args['link'];
+				$attr['href'] = esc_url( $this->args['link'] );
 			}
 
 			if ( '_blank' === $this->args['target'] ) {
@@ -3081,6 +3081,11 @@ if ( ! class_exists( 'Fusion_Column_Element' ) ) {
 					'description' => esc_attr__( 'Background Image ID from Media Library.', 'fusion-builder' ),
 					'param_name'  => 'background_image_id',
 					'value'       => '',
+					'group'       => esc_attr__( 'Background', 'fusion-builder' ),
+					'subgroup'    => [
+						'name' => 'background_type',
+						'tab'  => 'image',
+					],
 					'hidden'      => true,
 					'responsive'  => [
 						'state'             => 'large',

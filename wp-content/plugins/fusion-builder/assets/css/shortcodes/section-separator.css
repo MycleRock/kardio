@@ -75,7 +75,7 @@
   position: relative;
 }
 .fusion-section-separator .fusion-section-separator-spacer-height {
-  height: var(--awb-spacer-height);
+  height: calc(var(--awb-spacer-height) - 1px);
   padding-top: var(--awb-spacer-padding-top);
 }
 .fusion-section-separator .fusion-big-triangle-candy,

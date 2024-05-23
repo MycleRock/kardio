@@ -41,12 +41,10 @@ class Avada_Head {
 		add_action( 'wp_head', [ $this, 'insert_favicons' ], 2 );
 		add_action( 'admin_head', [ $this, 'insert_favicons' ], 2 );
 		add_action( 'login_head', [ $this, 'insert_favicons' ], 2 );
+
+		add_filter( 'pre_get_document_title', [ $this, 'adjust_title_tag' ] );
 		add_action( 'wp_head', [ $this, 'insert_og_meta' ], 5 );
 		remove_action( 'wp_head', 'adjacent_posts_rel_link_wp_head' );
-
-		if ( ! function_exists( '_wp_render_title_tag' ) ) {
-			add_action( 'wp_head', [ $this, 'render_title' ] );
-		}
 
 		add_action( 'wp_head', [ $this, 'set_user_agent' ], 1000 );
 		add_action( 'wp_head', [ $this, 'preload_fonts' ] );
@@ -75,17 +73,6 @@ class Avada_Head {
 			return $output . ' prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#"';
 		}
 		return $output;
-	}
-
-	/**
-	 * Renders the title.
-	 *
-	 * @access public
-	 * @since 5.0.0
-	 * @return void
-	 */
-	public function render_title() {
-		wp_title( '' );
 	}
 
 	/**
@@ -142,10 +129,244 @@ class Avada_Head {
 	}
 
 	/**
-	 * Avada extra OpenGraph tags
+	 * Adjust the title tag, in case a custom title is set in Page Options.
+	 *
+	 * @access public
+	 * @since 7.11.6
+	 * @return string
+	 */
+	public function adjust_title_tag( $title ) {
+		$custom_title = $this->get_custom_title();
+
+		$title = $custom_title ? $custom_title : $title;
+
+		return $title;
+	}
+
+	/**
+	 * Get custom title as set in Page Options.
+	 *
+	 * @access public
+	 * @since 7.11.6
+	 * @return string
+	 */ 
+	public function get_custom_title() {
+		$post  = get_queried_object();
+		$title = '';
+
+		if ( isset( $post->ID ) ) {
+			$title = fusion_get_page_option( 'seo_title', $post->ID );
+			$title = $title ? $this->replace_variables( $title ) : '';
+			$title = apply_filters( 'awb_seo_title', esc_html( $title ) );
+		}
+
+		return $title;
+	}
+
+	/**
+	 * Replace placeholder variables with values.
+	 *
+	 * @access public
+	 * @since 7.11.6
+	 * string $string The string to replace variables in.
+	 * @return string
+	 */ 
+	public function replace_variables( $string ) {
+		$string = str_replace( [ '[site_title]', '[site_tagline]', '[post_title]', '[separator]', '"', "'" ], [ get_bloginfo( 'name' ), get_bloginfo( 'description' ), get_the_title(), Avada()->settings->get( 'meta_tags_separator' ), '&quot;', '&#39;' ], $string );
+
+		return $string;
+	}   
+
+	/**
+	 * Get open graph locale.
+	 *
+	 * @access public
+	 * @since 7.11.6
+	 * @return string
+	 */ 
+	public function get_og_locale() {
+		$locale = get_locale();
+
+		$adjust_locales = [
+			'ca' => 'ca_ES',
+			'en' => 'en_US',
+			'el' => 'el_GR',
+			'et' => 'et_EE',
+			'ja' => 'ja_JP',
+			'sq' => 'sq_AL',
+			'uk' => 'uk_UA',
+			'vi' => 'vi_VN',
+			'zh' => 'zh_CN',
+		];
+
+		$locale = isset( $adjust_locales[ $locale ] ) ? $adjust_locales[ $locale ] : $locale;
+		$locale = 2 === strlen( $locale ) ? strtolower( $locale ) . '_' . strtoupper( $locale ) : $locale;
+
+		return apply_filters( 'awb_og_meta_locale', $locale );
+	}   
+	
+	/**
+	 * Get open graph type.
+	 *
+	 * @access public
+	 * @since 7.11.6
+	 * @return string
+	 */ 
+	public function get_og_type() {
+		$type = 'article';
+
+		if ( is_front_page() ) {
+			$type = 'website';
+		} elseif ( is_author() ) {
+			$type = 'profile';
+		}
+
+		return apply_filters( 'awb_og_meta_type', $type );
+	}   
+
+	/**
+	 * Get open graph title.
+	 *
+	 * @access public
+	 * @since 7.11.6
+	 * @return string
+	 */ 
+	public function get_og_title() {
+		$custom_title = $this->get_custom_title();
+
+		if ( $custom_title ) {
+			return $custom_title;
+		}
+
+		$title = strip_tags( str_replace( [ '"', "'" ], [ '&quot;', '&#39;' ], wp_title( '', false ) ) );
+
+		if ( is_home() && ! is_front_page() ) {
+			$title = get_the_title( get_option( 'page_for_posts' ) );
+		} elseif ( is_home() ) {
+			$title = get_bloginfo( 'name' ) . ' - ' . get_bloginfo( 'description' );
+		} elseif ( is_author() ) {
+			$user = get_user_by( 'ID', get_queried_object_id() );
+			
+			if ( isset( $user->display_name ) ) {
+				/* Translators: 1: Author name; 2: Site name. */
+				$title = sprintf( __( '%1$s, Author at %2$s', 'Avada' ), $user->display_name, get_bloginfo( 'name' ) );
+			} else {
+				/* Translators: Site name. */
+				$title = sprintf( __( ' Authored by %s', 'Avada' ), get_bloginfo( 'name' ) );
+			}
+		}
+
+		return apply_filters( 'awb_og_meta_title', $title );
+	}
+
+	/**
+	 * Get open graph description.
+	 *
+	 * @access public
+	 * @since 7.11.6
+	 * @return string
+	 */ 
+	public function get_og_description() {
+		$post        = get_queried_object();
+		$description = '';
+
+		if ( isset( $post->ID ) ) {
+			$description = fusion_get_page_option( 'meta_description', $post->ID );
+			
+			if ( $description ) {
+				$description = $this->replace_variables( $description );
+			} else {
+				$description = isset( $post->post_content ) ? Avada()->blog->get_content_stripped_and_excerpted( 55, $post->post_content ) : '';
+			}
+		}
+
+		return apply_filters( 'awb_og_meta_description', $description );
+	}
+
+	/**
+	 * Get open graph image.
+	 *
+	 * @access public
+	 * @since 7.11.6
+	 * @return array The image array consisting of url, width, height and mime type.
+	 */ 
+	public function get_og_image() {
+		$image = [];
+		if ( has_post_thumbnail() ) {
+			$image = wp_get_attachment_image_src( get_post_thumbnail_id(), 'full' );
+	
+			if ( $image ) {
+				$image['url']    = $image[0];
+				$image['width']  = $image[1];
+				$image['height'] = $image[2];
+				$image['type']   = get_post_mime_type( get_post_thumbnail_id() );
+			}       
+		} elseif ( Avada()->settings->get( 'logo' ) ) {
+			$image = Avada()->settings->get( 'logo' );
+
+			// Handling of GO that haven't been saved.
+			if ( isset( $image['url'] ) && ! isset( $image['id'] ) ) {
+				$image = $image['url'];
+			}
+
+			if ( is_string( $image ) ) {
+				$image = [
+					'url'    => $image,
+					'width'  => '115',
+					'height' => '25',
+					'type'   => 'image/png',
+				];
+			} else {
+				$image['type'] = get_post_mime_type( $image['id'] );
+			}
+		}
+
+		return apply_filters( 'awb_og_meta_image', $image );
+	}
+
+	/**
+	 * Get site GMT offset.
+	 *
+	 * @access public
+	 * @since 7.11.6
+	 * @return string
+	 */ 
+	public function get_og_site_gmt_offset() {
+		$offset    = (float) get_option( 'gmt_offset' );
+		$hours     = (int) $offset;
+		$minutes   = ( $offset - $hours );
+		$sign      = ( $offset < 0 ) ? '-' : '+';
+		$abs_hours = abs( $hours );
+		$abs_mins  = abs( $minutes * 60 );
+		$offset    = sprintf( '%s%02d:%02d', $sign, $abs_hours, $abs_mins );
+
+		return apply_filters( 'awb_og_gmt_offset', $offset );
+	}
+
+	/**
+	 * Get open graph author.
+	 *
+	 * @access public
+	 * @since 7.11.6
+	 * @return string
+	 */ 
+	public function get_og_author() {
+		$post   = get_queried_object();
+		$author = '';
+
+		if ( isset( $post->post_author ) ) {
+			$user   = get_user_by( 'ID', $post->post_author );
+			$author = isset( $user->display_name ) ? $user->display_name : $author;
+		}
+
+		return apply_filters( 'awb_og_meta_author', $author );
+	}   
+
+	/**
+	 * Avada extra OpenGraph tags.
 	 * These are added to the <head> of the page using the 'wp_head' action.
 	 *
-	 * @access  public
+	 * @access public
 	 * @return void
 	 */
 	public function insert_og_meta() {
@@ -155,47 +376,46 @@ class Avada_Head {
 			return;
 		}
 
-		// Early exit if this is not a singular post/page/cpt.
-		if ( ! is_singular() ) {
-			return;
-		}
-
-		global $post;
-
-		$settings = Avada::settings();
-
-		$image = '';
-		if ( ! has_post_thumbnail( $post->ID ) ) {
-			if ( isset( $settings['logo'] ) && $settings['logo'] ) {
-				$image = $settings['logo'];
-			}
-		} else {
-			$thumbnail_src = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'full' );
-			$image         = esc_attr( $thumbnail_src[0] );
-		}
-
-		if ( is_array( $image ) ) {
-			$image = ( isset( $image['url'] ) && ! empty( $image['url'] ) ) ? $image['url'] : '';
-		}
+		$locale      = $this->get_og_locale();
+		$type        = $this->get_og_type();
+		$title       = $this->get_og_title();
+		$description = $this->get_og_description();
+		$image       = $this->get_og_image();
+		$author      = $this->get_og_author();
 		?>
-
-		<meta property="og:title" content="<?php echo esc_attr( strip_tags( str_replace( [ '"', "'" ], [ '&quot;', '&#39;' ], $post->post_title ) ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.strip_tags_strip_tags ?>"/>
-		<meta property="og:type" content="article"/>
-		<meta property="og:url" content="<?php echo esc_url_raw( get_permalink() ); ?>"/>
+		<?php if ( $description ) : ?>
+			<meta name="description" content="<?php echo esc_attr( $description ); ?>"/>
+		<?php endif; ?>		
+		<meta property="og:locale" content="<?php echo esc_attr( $locale ); ?>"/>
+		<meta property="og:type" content="<?php echo esc_attr( $type ); ?>"/>
 		<meta property="og:site_name" content="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>"/>
-		<meta property="og:description" content="<?php echo esc_attr( Avada()->blog->get_content_stripped_and_excerpted( 55, $post->post_content ) ); ?>"/>
-
-		<?php if ( '' != $image ) : // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison ?>
-			<?php if ( is_array( $image ) ) : ?>
-				<?php if ( isset( $image['url'] ) ) : ?>
-					<meta property="og:image" content="<?php echo esc_url_raw( $image['url'] ); ?>"/>
-				<?php endif; ?>
-			<?php else : ?>
-				<meta property="og:image" content="<?php echo esc_url_raw( $image ); ?>"/>
-			<?php endif; ?>
+		<meta property="og:title" content="<?php echo esc_attr( $title ); ?>"/>
+		<?php if ( $description ) : ?>
+		<meta property="og:description" content="<?php echo esc_attr( $description ); ?>"/>
+		<?php endif; ?>
+		<meta property="og:url" content="<?php echo esc_url_raw( get_permalink() ); ?>"/>
+		<?php if ( 'article' === $type ) : ?>
+			<?php
+			$post   = get_queried_object();
+			$offset = $this->get_og_site_gmt_offset();
+			?>
+			<?php if ( isset( $post->post_date_gmt ) && isset( $post->post_type ) && 'post' === $post->post_type ) : ?>
+		<meta property="article:published_time" content="<?php echo esc_attr( str_replace( ' ', 'T', $post->post_date_gmt ) . $offset ); ?>"/>
+		<?php endif; ?>
+			<?php if ( isset( $post->post_date_gmt ) && isset( $post->post_modified_gmt ) && $post->post_date_gmt !== $post->post_modified_gmt ) : ?>
+		<meta property="article:modified_time" content="<?php echo esc_attr( str_replace( ' ', 'T', $post->post_modified_gmt ) . $offset ); ?>"/>
+		<?php endif; ?>
+			<?php if ( isset( $post->post_type ) && 'post' === $post->post_type && '' !== $author ) : ?>
+			<meta name="author" content="<?php echo esc_attr( $author ); ?>"/>
+		<?php endif; ?>
+		<?php endif; ?>
+		<?php if ( ! empty( $image ) ) : ?>
+		<meta property="og:image" content="<?php echo esc_url_raw( $image['url'] ); ?>"/>
+		<meta property="og:image:width" content="<?php echo esc_attr( $image['width'] ); ?>"/>
+		<meta property="og:image:height" content="<?php echo esc_attr( $image['height'] ); ?>"/>
+		<meta property="og:image:type" content="<?php echo esc_attr( $image['type'] ); ?>"/>
 		<?php endif; ?>
 		<?php
-
 	}
 
 	/**

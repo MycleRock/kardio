@@ -100,6 +100,15 @@ class Fusion_Dynamic_Data {
 	private $number_fields = [ 'range' ];
 
 	/**
+	 * Array of color fields.
+	 *
+	 * @access private
+	 * @since 3.11.6
+	 * @var array
+	 */
+	private $color_fields = [ 'colorpickeralpha', 'colorpicker' ];
+
+	/**
 	 * Class constructor.
 	 *
 	 * @since 2.1
@@ -665,7 +674,7 @@ class Fusion_Dynamic_Data {
 			$featured_images[ 'featured-image-' . $i ] = sprintf( esc_html__( 'Featured Image %d', 'fusion-builder' ), $i );
 		}
 
-		$all_fields = array_unique( array_merge( $this->link_and_text_fields, $this->file_fields, $this->number_fields, [ 'iconpicker' ] ) );
+		$all_fields = array_unique( array_merge( $this->link_and_text_fields, $this->file_fields, $this->number_fields, [ 'iconpicker' ], $this->color_fields ) );
 
 		$params = [
 			'post_title' => [
@@ -1513,7 +1522,7 @@ class Fusion_Dynamic_Data {
 						'value'       => [
 							'author_email'    => esc_html__( 'Email', 'fusion-builder' ),
 							'author_facebook' => esc_html__( 'Facebook', 'fusion-builder' ),
-							'author_twitter'  => esc_html__( 'Twitter', 'fusion-builder' ),
+							'author_twitter'  => esc_html__( 'X', 'fusion-builder' ),
 							'author_linkedin' => esc_html__( 'LinkedIn', 'fusion-builder' ),
 							'author_dribble'  => esc_html__( 'Dribble', 'fusion-builder' ),
 							'author_whatsapp' => esc_html__( 'WhatsApp', 'fusion-builder' ),
@@ -1544,9 +1553,10 @@ class Fusion_Dynamic_Data {
 			$link_options         = [];
 			$repeater_options     = false;
 			$relationship_options = false;
+			$color_options        = false;
 			$string_option_types  = [ 'text', 'textarea', 'number', 'range', 'wysiwyg', 'raw_textarea', 'raw_text' ];
 			$bulk_image_options   = [];
-			$all_fields           = array_unique( array_merge( $this->link_and_text_fields, $this->file_fields, $this->number_fields, [ 'iconpicker' ] ) );
+			$all_fields           = array_unique( array_merge( $this->link_and_text_fields, $this->file_fields, $this->number_fields, [ 'iconpicker' ], $this->color_fields ) );
 
 			// In builder get fields active for post type for each group.
 			if ( $this->get_builder_status() ) {
@@ -1572,6 +1582,8 @@ class Fusion_Dynamic_Data {
 								$repeater_options = true;
 							} elseif ( 'relationship' === $field['type'] ) {
 								$relationship_options = true;
+							} elseif ( 'color_picker' === $field['type'] ) {
+								$color_options = true;
 							}
 						}
 					}
@@ -1630,6 +1642,30 @@ class Fusion_Dynamic_Data {
 				];
 			}
 
+			// In builder and have color options add option, on front-end add for callback availability.
+			if ( ! $this->get_builder_status() || $color_options || $this->is_template_edited() ) {
+				$params['acf_color'] = [
+					'label'    => esc_html__( 'ACF Color', 'fusion-builder' ),
+					'id'       => 'acf_color',
+					'group'    => esc_attr__( 'Advanced Custom Fields', 'fusion-builder' ),
+					'options'  => $this->color_fields,
+					'default'  => __( '#ffffff', 'fusion-builder' ),
+					'callback' => [
+						'function' => 'acf_get_color_field',
+						'ajax'     => true,
+					],
+					'fields'   => [
+						'field' => [
+							'heading'     => esc_html__( 'Field', 'fusion-builder' ),
+							'description' => esc_html__( 'Enter field name you want to use.', 'fusion-builder' ),
+							'param_name'  => 'field',
+							'default'     => '',
+							'type'        => 'text',
+						],
+					],
+				];
+			}
+
 			// In builder and have repeater options add option, on front-end add for callback availability.
 			if ( ! $this->get_builder_status() || $repeater_options || $this->is_template_edited() ) {
 				$params['acf_repeater_single'] = [
@@ -1667,48 +1703,48 @@ class Fusion_Dynamic_Data {
 					],
 				];
 
-					$params['acf_repeater_parent'] = [
-						'label'    => esc_html__( 'ACF Repeater', 'fusion-builder' ),
-						'id'       => 'acf_repeater_parent',
-						'group'    => esc_attr__( 'Advanced Custom Fields', 'fusion-builder' ),
-						'options'  => [ 'parent' ],
-						'default'  => __( 'Custom Field Value Here', 'fusion-builder' ),
-						'exclude'  => [ 'before', 'after', 'fallback' ],
-						'callback' => [
-							'function' => 'acf_get_repeater_parent',
-							'ajax'     => false,
+				$params['acf_repeater_parent'] = [
+					'label'    => esc_html__( 'ACF Repeater', 'fusion-builder' ),
+					'id'       => 'acf_repeater_parent',
+					'group'    => esc_attr__( 'Advanced Custom Fields', 'fusion-builder' ),
+					'options'  => [ 'parent' ],
+					'default'  => __( 'Custom Field Value Here', 'fusion-builder' ),
+					'exclude'  => [ 'before', 'after', 'fallback' ],
+					'callback' => [
+						'function' => 'acf_get_repeater_parent',
+						'ajax'     => false,
+					],
+					'fields'   => [
+						'field' => [
+							'heading'     => esc_html__( 'Field', 'fusion-builder' ),
+							'description' => esc_html__( 'Enter repeater field name you want to use.', 'fusion-builder' ),
+							'param_name'  => 'field',
+							'default'     => '',
+							'type'        => 'text',
+							'css_class'   => 'fusion-skip-debounce fusion-skip-change-event',
 						],
-						'fields'   => [
-							'field' => [
-								'heading'     => esc_html__( 'Field', 'fusion-builder' ),
-								'description' => esc_html__( 'Enter repeater field name you want to use.', 'fusion-builder' ),
-								'param_name'  => 'field',
-								'default'     => '',
-								'type'        => 'text',
-								'css_class'   => 'fusion-skip-debounce fusion-skip-change-event',
-							],
-						],
-					];
+					],
+				];
 
-					$params['acf_repeater_sub'] = [
-						'label'    => esc_html__( 'ACF Repeater Sub Field', 'fusion-builder' ),
-						'id'       => 'acf_repeater_sub',
-						'group'    => esc_attr__( 'Advanced Custom Fields', 'fusion-builder' ),
-						'options'  => $all_fields,
-						'default'  => __( 'Custom Field Value Here', 'fusion-builder' ),
-						'callback' => [
-							'function' => 'acf_get_repeater_sub_field',
+				$params['acf_repeater_sub'] = [
+					'label'    => esc_html__( 'ACF Repeater Sub Field', 'fusion-builder' ),
+					'id'       => 'acf_repeater_sub',
+					'group'    => esc_attr__( 'Advanced Custom Fields', 'fusion-builder' ),
+					'options'  => $all_fields,
+					'default'  => __( 'Custom Field Value Here', 'fusion-builder' ),
+					'callback' => [
+						'function' => 'acf_get_repeater_sub_field',
+					],
+					'fields'   => [
+						'sub_field' => [
+							'heading'     => esc_html__( 'Sub Field', 'fusion-builder' ),
+							'description' => esc_html__( 'Enter repeater sub field name you want to use.', 'fusion-builder' ),
+							'param_name'  => 'sub_field',
+							'default'     => '',
+							'type'        => 'text',
 						],
-						'fields'   => [
-							'sub_field' => [
-								'heading'     => esc_html__( 'Sub Field', 'fusion-builder' ),
-								'description' => esc_html__( 'Enter repeater sub field name you want to use.', 'fusion-builder' ),
-								'param_name'  => 'sub_field',
-								'default'     => '',
-								'type'        => 'text',
-							],
-						],
-					];
+					],
+				];
 			}
 
 			// In builder and have relationship field add option.

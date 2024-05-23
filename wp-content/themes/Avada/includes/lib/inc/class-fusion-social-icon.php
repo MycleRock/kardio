@@ -194,6 +194,7 @@ class Fusion_Social_Icon {
 			'linkedin'   => 'LinkedIn',
 			'paypal'     => 'PayPal',
 			'soundcloud' => 'SoundCloud',
+			'twitter'    => 'X',
 			'wechat'     => 'WeChat',
 			'whatsapp'   => 'WhatsApp',
 			'youtube'    => 'YouTube',

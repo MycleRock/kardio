@@ -8,6 +8,31 @@
 $fusion_forms = new Fusion_Form_DB_Forms();
 $forms        = $fusion_forms->get_formatted();
 ksort( $forms );
+
+$action = false;
+if ( isset( $_REQUEST['action'] ) && -1 !== $_REQUEST['action'] && '-1' !== $_REQUEST['action'] ) {
+	$action = sanitize_text_field( wp_unslash( $_REQUEST['action'] ) );
+} elseif ( isset( $_REQUEST['action2'] ) && -1 !== $_REQUEST['action2'] && '-1' !== $_REQUEST['action2'] ) {
+	$action = sanitize_text_field( wp_unslash( $_REQUEST['action2'] ) );
+}
+
+if ( 'awb_bulk_delete_entries' === $action && AWB_Access_Control::wp_user_can_for_post( 'fusion_form', 'delete_others_posts' ) ) {
+	check_admin_referer( 'bulk-avada_page_avada-form-entries' );
+
+	$element_ids = '';
+	if ( isset( $_GET['post'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+		$element_ids = wp_unslash( $_GET['post'] ); // phpcs:ignore WordPress.Security
+	}
+	if ( '' !== $element_ids ) {
+		$element_ids = (array) $element_ids;
+	}
+	$submissions = new Fusion_Form_DB_Submissions();
+	if ( ! empty( $element_ids ) ) {
+		foreach ( $element_ids as $id ) {
+			$submissions->delete( (int) $id );
+		}
+	}
+}
 ?>
 <?php Fusion_Builder_Admin::header( 'form-entries' ); ?>
 <?php if ( AWB_Access_Control::wp_user_can_for_post( 'fusion_form', 'create_posts' ) ) : ?>
@@ -85,7 +110,26 @@ ksort( $forms );
 				<span id="fusion-form-export-status"><span id="fusion-form-export-status-bar"></span></span>
 			<?php } ?>
 		<?php
-		$form_creator_list_table->display();
+		add_filter( 'user_has_cap', [ $this, 'maybe_add_cap' ], 10, 4 );
+		if ( current_user_can( 'moderate_comments' ) ) {
+			?>
+			<form id="avada-form-entries" method="get">
+				<input type="hidden" name="page" value="avada-form-entries">
+				<input type="hidden" name="form_id" value="<?php echo (int) $form_id; ?>">
+				<?php $form_creator_list_table->display(); ?>
+			</form>
+			<?php
+		} else {
+			?>
+			<div class="fusion-builder-important-notice avada-db-card">
+			<h2><?php esc_html_e( 'Access Denied', 'fusion-builder' ); ?></h2>
+			<p>
+				<?php esc_html_e( 'Sorry, you are not allowed to access entries of this form.', 'fusion-builder' ); ?>
+			</p>
+			</div>
+			<?php
+		}
+		remove_filter( 'user_has_cap', [ $this, 'maybe_add_cap' ], 10, 4 );
 	} else {
 		?>
 		<div class="fusion-builder-important-notice avada-db-card">

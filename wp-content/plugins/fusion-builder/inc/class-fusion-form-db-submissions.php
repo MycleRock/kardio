@@ -38,7 +38,7 @@ class Fusion_Form_DB_Submissions extends Fusion_Form_DB_Items {
 		foreach ( $ids as $id ) {
 
 			// Get the form-ID for this submission.
-			$submission = $this->get( [ 'where' => [ 'id' => $id ] ] );
+			$submission = $this->get( [ 'where' => [ 'id' => (int) $id ] ] );
 			if ( isset( $submission[0] ) ) {
 
 				// Get the form-ID.

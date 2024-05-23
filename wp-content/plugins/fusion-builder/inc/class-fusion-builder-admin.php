@@ -164,6 +164,34 @@ class Fusion_Builder_Admin {
 	}
 
 	/**
+	 * Add capability needed to view form entries, ig current user is author of the form.
+	 *
+	 * @access public
+	 * @since 7.11.6
+	 * @param bool[]   $allcaps Array of key/value pairs where keys represent a capability name.
+	 * @param string[] $caps    Required primitive capabilities for the requested capability.
+	 * @param array    $args
+	 * @param WP_User  $user    The user object.
+	 * @return bool[]
+	 */
+	public function maybe_add_cap( $allcaps, $caps, $args, $user ) {
+		global $wpdb, $current_screen;
+
+		if ( isset( $current_screen->base ) && 'avada_page_avada-form-entries' === $current_screen->base && isset( $_GET['form_id'] ) ) {
+			$query   = "SELECT form_id FROM {$wpdb->prefix}fusion_forms WHERE ID = %d";
+			$results = $wpdb->get_results( $wpdb->prepare( $query, (int) $_GET['form_id'] ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL
+			$form_id = isset( $results[0]->form_id ) ? $results[0]->form_id : 0;
+			$form    = get_post( $form_id );
+
+			if ( isset( $form->post_author ) && $user->ID === (int) $form->post_author ) {
+				$allcaps['moderate_comments'] = true;
+			}
+		}
+
+		return $allcaps;
+	}
+
+	/**
 	 * Add items to the Avada dashboard main menu options sub-menu.
 	 *
 	 * @access public

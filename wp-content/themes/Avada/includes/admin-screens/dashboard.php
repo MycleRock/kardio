@@ -48,11 +48,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="avada-db-card-caption">
 						<?php if ( '' === $setup_completed ) : ?>
 							<?php /* translators: %s: The username. */ ?>
-							<h1 class="avada-db-welcome-heading"><?php echo esc_html( sprintf( apply_filters( 'avada_admin_welcome_title', __( 'Welcome To Avada, %s!', 'Avada' ) ), ucfirst( $the_user->display_name ) ) ); ?></h1>
+							<h1 class="avada-db-welcome-heading"><?php echo esc_html( apply_filters( 'avada_admin_welcome_title', sprintf( __( 'Welcome To Avada, %s!', 'Avada' ), ucfirst( $the_user->display_name ) ) ) ); ?></h1>
 							<p class="avada-db-welcome-text"><?php echo esc_html( apply_filters( 'avada_admin_setup_welcome_text', __( 'Launch the Avada setup wizard, the easiest way to get your website started.', 'Avada' ) ) ); ?></p>
 						<?php else : ?>
 							<?php /* translators: %s: The username. */ ?>
-							<h1 class="avada-db-welcome-heading"><?php echo esc_html( sprintf( apply_filters( 'avada_admin_welcome_title_completed', __( 'Hello %s!', 'Avada' ) ), ucfirst( $the_user->display_name ) ) ); ?></h1>
+							<h1 class="avada-db-welcome-heading"><?php echo esc_html( apply_filters( 'avada_admin_welcome_title_completed', sprintf( __( 'Hello %s!', 'Avada' ), ucfirst( $the_user->display_name ) ) ) ); ?></h1>
 							<p class="avada-db-welcome-text"><?php echo esc_html( apply_filters( 'avada_admin_setup_welcome_text_completed', __( 'Welcome back to the Avada dashboard. Take a look at our latest update.', 'Avada' ) ) ); ?></p>
 						<?php endif; ?>
 					</div>

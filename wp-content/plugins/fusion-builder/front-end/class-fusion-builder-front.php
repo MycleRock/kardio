@@ -1873,11 +1873,11 @@ function fusion_get_image_data( $post_id, $post_featured_image_sizes = [], $post
 
 	if ( class_exists( 'WooCommerce' ) && ! is_null( $product ) && method_exists( $product, 'is_purchasable' ) && $product->is_purchasable() ) {
 		ob_start();
-		fusion_wc_get_template( 'loop/rating.php' );
+		wc_get_template( 'loop/rating.php' );
 		$rating = ob_get_clean();
 
 		ob_start();
-		fusion_wc_get_template( 'loop/price.php' );
+		wc_get_template( 'loop/price.php' );
 		$price = ob_get_clean();
 
 		ob_start();

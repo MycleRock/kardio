@@ -60,7 +60,7 @@ html.flexbox .woocommerce .social-share {
   visibility: hidden;
   height: 0;
 }
-.single_variation_wrap {
+.single-product .single_variation_wrap {
   margin: 10px 0;
 }
 .single_variation_wrap .variations_button,

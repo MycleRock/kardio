@@ -753,7 +753,7 @@ if ( fusion_is_element_enabled( 'fusion_sharing' ) ) {
 								'multi'                  => true,
 								'choices'                => [
 									'facebook'  => esc_html__( 'Facebook', 'fusion-builder' ),
-									'twitter'   => esc_html__( 'Twitter', 'fusion-builder' ),
+									'twitter'   => esc_html__( 'X', 'fusion-builder' ),
 									'reddit'    => esc_html__( 'Reddit', 'fusion-builder' ),
 									'linkedin'  => esc_html__( 'LinkedIn', 'fusion-builder' ),
 									'whatsapp'  => esc_html__( 'WhatsApp', 'fusion-builder' ),
@@ -1098,7 +1098,7 @@ function fusion_element_sharing_box() {
 						'param_name'  => 'social_share_links',
 						'choices'     => [
 							'facebook'  => esc_html__( 'Facebook', 'fusion-builder' ),
-							'twitter'   => esc_html__( 'Twitter', 'fusion-builder' ),
+							'twitter'   => esc_html__( 'X', 'fusion-builder' ),
 							'reddit'    => esc_html__( 'Reddit', 'fusion-builder' ),
 							'linkedin'  => esc_html__( 'LinkedIn', 'fusion-builder' ),
 							'whatsapp'  => esc_html__( 'WhatsApp', 'fusion-builder' ),

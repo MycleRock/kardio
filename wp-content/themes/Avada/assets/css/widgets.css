@@ -60,7 +60,7 @@ body .fusion-content-widget-area .button {
   color: #d8d8d8;
 }
 .fusion-content-widget-area #comment-input input,
-.fusion-content-widget-area #s {
+.fusion-content-widget-area input.s {
   width: 100%;
   margin-right: 0;
 }

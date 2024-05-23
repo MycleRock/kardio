@@ -38,13 +38,13 @@ class Fusion_Widget_Tweets extends WP_Widget {
 
 		$widget_ops  = [
 			'classname'   => 'tweets',
-			'description' => __( 'Adds your twitter timeline', 'fusion-builder' ),
+			'description' => __( 'Adds your X timeline', 'fusion-builder' ),
 		];
 		$control_ops = [
 			'id_base' => 'tweets-widget',
 		];
 
-		parent::__construct( 'tweets-widget', __( 'Avada: Twitter', 'fusion-builder' ), $widget_ops, $control_ops );
+		parent::__construct( 'tweets-widget', __( 'Avada: X', 'fusion-builder' ), $widget_ops, $control_ops );
 
 	}
 
@@ -278,7 +278,7 @@ class Fusion_Widget_Tweets extends WP_Widget {
 			<?php endif; ?>
 		</script>
 		<?php /* translators: "How to setup the Avada twitter widget." link. */ ?>
-		<p><?php printf( esc_attr__( 'For general setup information or information on how to setup a Twitter App or a Twitter Widget on twitter.com, please see our documentation: %s', 'fusion-builder' ), '<a href="' . esc_url_raw( $twitter_doc_url ) . '" target="_blank" rel="noopener noreferrer">' . esc_attr__( 'How to setup the Avada twitter widget.', 'fusion-builder' ) . '</a>' ); ?></p>
+		<p><?php printf( esc_attr__( 'For general setup information or information on how to setup a X App or a X Widget on X.com, please see our documentation: %s', 'fusion-builder' ), '<a href="' . esc_url_raw( $twitter_doc_url ) . '" target="_blank" rel="noopener noreferrer">' . esc_attr__( 'How to setup the Avada twitter widget.', 'fusion-builder' ) . '</a>' ); ?></p>
 
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title:', 'fusion-builder' ); ?></label>
@@ -288,19 +288,19 @@ class Fusion_Widget_Tweets extends WP_Widget {
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'widget_type' ) ); ?>"><?php esc_html_e( 'Widget Style:', 'fusion-builder' ); ?></label>
 			<select id="<?php echo esc_attr( $this->get_field_id( 'widget_type' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'widget_type' ) ); ?>" class="widefat widget-type-selector" style="width:100%;">
-				<option value="twitter_preconfig_style" <?php selected( $instance['widget_type'], 'twitter_preconfig_style' ); ?>><?php esc_html_e( 'Twitter Preconfigured Style (deprecated)', 'fusion-builder' ); ?></option>
-				<option value="twitter_style" <?php selected( $instance['widget_type'], 'twitter_style' ); ?>><?php esc_html_e( 'Twitter Style', 'fusion-builder' ); ?></option>
+				<option value="twitter_preconfig_style" <?php selected( $instance['widget_type'], 'twitter_preconfig_style' ); ?>><?php esc_html_e( 'X Preconfigured Style (deprecated)', 'fusion-builder' ); ?></option>
+				<option value="twitter_style" <?php selected( $instance['widget_type'], 'twitter_style' ); ?>><?php esc_html_e( 'X Style', 'fusion-builder' ); ?></option>
 				<option value="avada_style" <?php selected( $instance['widget_type'], 'avada_style' ); ?>><?php esc_html_e( 'Avada Style', 'fusion-builder' ); ?></option>
 			</select>
 		</p>
 
 		<p  class="general_option twitter_id">
-			<label for="<?php echo esc_attr( $this->get_field_id( 'twitter_id' ) ); ?>"><?php esc_html_e( 'Twitter Username:', 'fusion-builder' ); ?></label>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'twitter_id' ) ); ?>"><?php esc_html_e( 'X Username:', 'fusion-builder' ); ?></label>
 			<input class="widefat" type="text" id="<?php echo esc_attr( $this->get_field_id( 'twitter_id' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'twitter_id' ) ); ?>" value="<?php echo esc_attr( $instance['twitter_id'] ); ?>" />
 		</p>
 
 		<p class="twitter_style widget_id">
-			<label for="<?php echo esc_attr( $this->get_field_id( 'widget_id' ) ); ?>"><?php esc_html_e( 'Twitter Widget ID:', 'fusion-builder' ); ?></label>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'widget_id' ) ); ?>"><?php esc_html_e( 'X Widget ID:', 'fusion-builder' ); ?></label>
 			<input class="widefat" type="text" id="<?php echo esc_attr( $this->get_field_id( 'widget_id' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'widget_id' ) ); ?>" value="<?php echo esc_attr( $instance['widget_id'] ); ?>" />
 		</p>
 

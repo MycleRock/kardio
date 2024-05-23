@@ -267,40 +267,23 @@ class Avada_Page_Options {
 		check_ajax_referer( 'fusion-page-options-nonce', 'fusion_po_nonce' );
 		$response = [];
 
-		$post_id = 0;
-		if ( isset( $_POST['post_id'] ) ) {
-			$post_id = absint( $_POST['post_id'] );
-		}
-
-		if ( ! isset( $_FILES['po_file_upload']['name'] ) ) {
+		if ( ! isset( $_FILES['po_file_upload']['name'] ) || ! isset( $_FILES['po_file_upload']['tmp_name'] ) ) {
 			wp_die();
 		}
 
-		// Do NOT use wp_usnlash() here as it breaks imports on windows machines.
-		$json_file_path = wp_normalize_path( $this->po_dir_path . $_FILES['po_file_upload']['name'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		$file_type       = wp_check_filetype_and_ext( $_FILES['po_file_upload']['tmp_name'], $_FILES['po_file_upload']['name'] );
+		$proper_filename = $file_type['proper_filename'] ? $file_type['proper_filename'] : $_FILES['po_file_upload']['tmp_name'];
 
-		if ( ! file_exists( $this->po_dir_path ) ) {
-			wp_mkdir_p( $this->po_dir_path );
-		}
-
-		if ( ! isset( $_FILES['po_file_upload'] ) || ! isset( $_FILES['po_file_upload']['tmp_name'] ) ) {
+		if ( 'json' !== $file_type['ext'] ) {
 			wp_die();
 		}
 
-		// We're already checking if defined above.
-		// Do NOT use wp_usnlash() here as it breaks imports on windows machines.
-		if ( ! $this->wp_filesystem->move( wp_normalize_path( $_FILES['po_file_upload']['tmp_name'] ), $json_file_path, true ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
-			wp_die();
-		}
-
-		$content_json = $this->wp_filesystem->get_contents( $json_file_path );
+		$content_json = $this->wp_filesystem->get_contents( $proper_filename );
 
 		$custom_fields = json_decode( $content_json, true );
 		if ( $custom_fields ) {
 			$response['custom_fields'] = $custom_fields;
 		}
-
-		$this->wp_filesystem->delete( $json_file_path );
 
 		echo wp_json_encode( $response );
 		wp_die();

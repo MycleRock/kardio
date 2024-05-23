@@ -2,6 +2,7 @@
 /* stylelint-disable no-descending-specificity */
 /* Woocommerce */
 .fusion-body .wc-block-components-notice-banner {
+  display: flex;
   margin: 0 0 calc(var(--body_typography-font-size) * 2) 0;
   padding: calc(var(--body_typography-font-size) * 1.2) var(--body_typography-font-size) !important;
   gap: 0.5em;
@@ -33,6 +34,7 @@
   font-weight: inherit;
 }
 .fusion-body .wc-block-components-notice-banner > .wc-block-components-notice-banner__content {
+  flex: 1;
   flex-wrap: wrap;
 }
 .fusion-body .wc-block-components-notice-banner > .wc-block-components-notice-banner__content ul {

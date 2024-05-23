@@ -189,8 +189,6 @@ class AWB_Off_Canvas_Front_End extends AWB_Layout_Conditions {
 
 				// Get Element Appearance Animations option.
 				'status_css_animations'          => $fusion_settings->get( 'status_css_animations' ),
-
-				'is_mobile'                      => wp_is_mobile(),
 			]
 		);
 		$options = self::filter_options( $options );

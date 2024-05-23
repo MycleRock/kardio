@@ -389,6 +389,9 @@ class FusionBuilder {
 		add_filter( 'widget_display_callback', [ $this, 'fusion_disable_wpautop_in_widgets' ], 10 );
 		add_filter( 'no_texturize_shortcodes', [ $this, 'exempt_from_wptexturize' ] );
 
+		// Sanitize post content.
+		add_filter( 'content_save_pre', [ $this, 'filter_post_content' ], 10 );
+
 		// Add checkout wrapper.
 		if ( $is_builder ) {
 			add_filter( 'fusion_builder_front_end_content', [ $this, 'checkout_elements_wrapper' ] );
@@ -432,6 +435,63 @@ class FusionBuilder {
 		add_filter( 'fusion_google_fonts_extra', [ $this, 'has_extra_google_fonts' ] );
 
 		add_action( 'wp_head', [ $this, 'add_element_media_query_styles' ] );
+	}
+
+	/**
+	 * Sanitizes content for allowed HTML tags for post content.
+	 *
+	 * This function expects slashed data.
+	 *
+	 * @access public
+	 * @since 7.11.7
+	 * @param string $post_content Post content to filter, expected to be escaped with slashes.
+	 * @return string Filtered post content with allowed HTML tags and attributes intact.
+	 */
+	public function filter_post_content( $post_content ) {
+		if ( current_user_can( 'unfiltered_html' ) ) {
+			return $post_content;
+		}
+
+		$post_content = stripslashes( $post_content );
+		$post_content = preg_replace_callback( '/( link="[^"]+"| href="[^"]+"| url="[^"]+")/', [ $this, 'process_urls' ], $post_content );
+		$post_content = preg_replace_callback( '/\[fusion_code\](.+)\[\/fusion_code\]/U', [ $this, 'process_code_block' ], $post_content );
+
+		return addslashes( $post_content );
+	}
+
+	/**
+	 * Sanitizes URLs passed from post content that start with parameter name.
+	 *
+	 * @access public
+	 * @since 7.11.7
+	 * @param string $url_param The URL param to be sanitized starting with link=", url=" or href=".
+	 * @return string Sanitized URL param.
+	 */
+	public function process_urls( $url_param ) {
+		$url     = str_replace( [ ' link="', ' url="', ' href="' ], '', $url_param[0] );
+		$url     = trim( $url, '"' );
+		$new_url = sanitize_url( $url );
+
+		if ( $url === str_replace( 'http://', '', $new_url ) ) {
+			return $url_param[0];
+		}
+
+		return str_replace( $url, $new_url, $url_param[0] );
+	}
+
+	/**
+	 * Sanitizes code block element in post content.
+	 *
+	 * @access public
+	 * @since 7.11.7
+	 * @param string $code_block The code block including shortcode tags.
+	 * @return string Sanitized code block.
+	 */
+	public function process_code_block( $code_block ) {
+		$code_block_content     = str_replace( [ '[fusion_code]', '[/fusion_code]' ], '', $code_block[0] );
+		$code_block_content_new = base64_decode( $code_block_content );
+
+		return str_replace( $code_block_content, $code_block_content_new, $code_block[0] );
 	}
 
 	/**
@@ -6972,6 +7032,20 @@ class FusionBuilder {
 			'output' => [
 				'element'  => 'badge_position',
 				'value'    => 'v2',
+				'operator' => '==',
+			],
+		];
+
+		// YouTube.
+		$element_option_map['thumbnail_size']['fusion_youtube'][] = [
+			'check'  => [
+				'element-option' => 'video_facade',
+				'value'          => 'on',
+				'operator'       => '==',
+			],
+			'output' => [
+				'element'  => 'video_facade',
+				'value'    => 'on',
 				'operator' => '==',
 			],
 		];

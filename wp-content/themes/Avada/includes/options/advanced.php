@@ -379,9 +379,16 @@ function avada_options_section_advanced( $sections ) {
 							],
 						],
 					],
+					'meta_tags_separator'                => [
+						'label'       => esc_html__( 'Meta Tags Separator', 'Avada' ),
+						'description' => esc_html__( 'Set a separator character that can be used in the Avada Page Options SEO tab for post title and description meta tags.', 'Avada' ),
+						'id'          => 'meta_tags_separator',
+						'default'     => '-',
+						'type'        => 'text',
+					],
 					'status_opengraph'                   => [
-						'label'       => esc_html__( 'Open Graph Meta Tags', 'Avada' ),
-						'description' => __( 'Turn on to enable open graph meta tags which are mainly used when sharing pages on social networking sites like Facebook. <strong>IMPORTANT:</strong> Some optimization plugins, like e.g. Yoast SEO, add their own implementation of this, and if you want to use that, this option should be disabled.', 'Avada' ),
+						'label'       => esc_html__( 'Description And Open Graph Meta Tags', 'Avada' ),
+						'description' => __( 'Turn on to enable custom description meta tag and open graph meta tags which are mainly used when sharing pages on social networking sites like Facebook. <strong>IMPORTANT:</strong> Some optimization plugins, like e.g. Yoast SEO, add their own implementation of this, and if you want to use that, this option should be disabled.', 'Avada' ),
 						'id'          => 'status_opengraph',
 						'default'     => '1',
 						'type'        => 'switch',

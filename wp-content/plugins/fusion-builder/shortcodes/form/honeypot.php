@@ -103,14 +103,14 @@ function fusion_form_honeypot() {
 						'heading'     => esc_attr__( 'CSS Class', 'fusion-builder' ),
 						'param_name'  => 'class',
 						'value'       => '',
-						'description' => esc_attr__( 'Add a class for the input field.', 'fusion-builder' ),
+						'description' => esc_attr__( 'Add a class for the form field.', 'fusion-builder' ),
 					],
 					[
 						'type'        => 'textfield',
 						'heading'     => esc_attr__( 'CSS ID', 'fusion-builder' ),
 						'param_name'  => 'id',
 						'value'       => '',
-						'description' => esc_attr__( 'Add an ID for the input field.', 'fusion-builder' ),
+						'description' => esc_attr__( 'Add an ID for the form field.', 'fusion-builder' ),
 					],
 				],
 			]

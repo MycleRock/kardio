@@ -62,6 +62,7 @@ if ( fusion_is_element_enabled( 'fusion_youtube' ) ) {
 					'hide_on_mobile'    => fusion_builder_default_visibility( 'string' ),
 					'id'                => '',
 					'title_attribute'   => '',
+					'thumbnail_size'    => 'auto',
 					'width'             => 600,
 					'video_facade'      => $fusion_settings->get( 'video_facade' ),
 					'structured_data'   => '',
@@ -144,7 +145,7 @@ if ( fusion_is_element_enabled( 'fusion_youtube' ) ) {
 				if ( 'on' === $this->args['video_facade'] ) {
 					$api_params = ( false === strpos( $this->args['api_params'], 'enablejsapi=1' ) ? $this->args['api_params'] . '&enablejsapi=1' : $this->args['api_params'] );
 					$class      = ( $defaults['height'] > $defaults['width'] ) ? 'portrait' : 'landscape';
-					$html      .= '<lite-youtube videoid="' . $id . '" class="' . esc_attr( $class ) . '" params="wmode=transparent&autoplay=1' . $api_params . '" title="' . esc_attr( $title ) . '" width="' . $this->args['width'] . '" height="' . $this->args['height'] . '"></lite-youtube>';
+					$html      .= '<lite-youtube videoid="' . $id . '" class="' . esc_attr( $class ) . '" params="wmode=transparent&autoplay=1' . $api_params . '" title="' . esc_attr( $title ) . '" width="' . $this->args['width'] . '" height="' . $this->args['height'] . '" data-thumbnail-size="' . $this->args['thumbnail_size'] . '"></lite-youtube>';
 				} else {
 					$iframe = '<iframe title="' . esc_attr( $title ) . '" src="https://www.youtube.com/embed/' . $id . '?wmode=transparent&autoplay=0' . $this->args['api_params'] . '" width="' . $this->args['width'] . '" height="' . $this->args['height'] . '" allowfullscreen allow="autoplay; fullscreen"></iframe>';
 
@@ -390,6 +391,28 @@ function fusion_element_youtube() {
 							'off' => esc_attr__( 'Off', 'fusion-builder' ),
 						],
 					],
+					[
+						'type'        => 'select',
+						'heading'     => esc_html__( 'Thumbnail Size', 'fusion-builder' ),
+						'description' => esc_html__( "Select the video's preview thumbnail size. The sizes are YouTube standard, and not all sizes are available for every video. Leave empty for auto selection depending on video dimensions.", 'fusion-builder' ),
+						'param_name'  => 'thumbnail_size',
+						'default'     => 'auto',
+						'value'       => [
+							'auto'          => esc_html__( 'Auto', 'fusion-builder' ),
+							'default'       => esc_html__( 'Default (120x90)', 'fusion-builder' ),
+							'mqdefault'     => esc_html__( 'Medium (320x180)', 'fusion-builder' ),
+							'hqdefault'     => esc_html__( 'High (480x360)', 'fusion-builder' ),
+							'sddefault'     => esc_html__( 'Standard (640x480)', 'fusion-builder' ),
+							'maxresdefault' => esc_html__( 'Max Resolution (1280x720)', 'fusion-builder' ),
+						],
+						'dependency'  => [
+							[
+								'element'  => 'video_facade',
+								'value'    => 'on',
+								'operator' => '==',
+							],
+						],						
+					],					
 					'fusion_margin_placeholder' => [
 						'param_name' => 'margin',
 						'group'      => esc_attr__( 'General', 'fusion-builder' ),

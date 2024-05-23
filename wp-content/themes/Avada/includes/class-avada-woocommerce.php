@@ -79,6 +79,8 @@ class Avada_Woocommerce {
 		remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_product_link_close', 5 );
 		remove_action( 'woocommerce_shop_loop_item_title', 'woocommerce_template_loop_product_title', 10 );
 
+		add_filter( 'woocommerce_product_loop_start', [ $this, 'product_loop_start' ], 10 );
+
 		add_action( 'woocommerce_before_shop_loop_item', [ $this, 'before_shop_loop_item' ] );
 		add_action( 'woocommerce_after_shop_loop_item', [ $this, 'after_shop_loop_item' ], 30 );
 		add_action( 'woocommerce_before_subcategory', [ $this, 'before_shop_loop_item' ], 5 );
@@ -461,19 +463,13 @@ class Avada_Woocommerce {
 			wp_enqueue_script( 'wc-cart-fragments' );
 		}
 
-		if ( Avada()->settings->get( 'status_lightbox' ) ) {
-			wp_dequeue_script( 'prettyPhoto' );
-			wp_dequeue_script( 'prettyPhoto-init' );
-			wp_dequeue_style( 'woocommerce_prettyPhoto_css' );
-		}
-
 		// Dequeue flexslider since we already enquque our own (jquery-flexslider).
 		if ( is_product() ) {
 			wp_dequeue_script( 'flexslider' );
 		}
 
 		if ( 'off' === Avada()->settings->get( 'load_block_styles' ) ) {
-			wp_dequeue_style( 'wc-blocks-style' );
+			wp_deregister_style( 'wc-blocks-style' );
 		}
 	}
 
@@ -860,6 +856,36 @@ class Avada_Woocommerce {
 	 */
 	public function add_product_wrappers_open() {
 		get_template_part( 'templates/wc-add-product-wrappers-open' );
+	}
+
+
+	/**
+	 * Adjusts the product loop start ul HTML tag.
+	 *
+	 * @access public
+	 * @since 7.11.6
+	 * @param string $html The native ul tag.
+	 * @return string
+	 */
+	public function product_loop_start( $html ) {
+
+		$str_to_replace = '"products columns-' . esc_attr( wc_get_loop_prop( 'columns' ) ) . '"';
+
+		// Reset the column amount correctly for shop and archive pages.
+		if ( ! wc_get_loop_prop( 'is_shortcode' ) ) {
+			if ( is_shop() ) {
+				wc_set_loop_prop( 'columns', Avada()->settings->get( 'woocommerce_shop_page_columns' ) );
+			}
+			if ( is_product_category() ||
+				is_product_tag() ||
+				is_tax()
+			) {
+				$columns = Avada()->settings->get( 'woocommerce_archive_page_columns' );
+				wc_set_loop_prop( 'columns', $columns );
+			}
+		}
+
+		return str_replace( $str_to_replace, '"products clearfix products-' . esc_attr( wc_get_loop_prop( 'columns' ) ) . '"', $html );
 	}
 
 	/**

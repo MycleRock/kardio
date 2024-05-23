@@ -84,6 +84,8 @@ class Fusion_WooCommerce {
 		add_filter( 'woocommerce_single_product_image_thumbnail_html', [ $this, 'single_product_image_thumbnail_html' ], 10, 2 );
 
 		add_filter( 'woocommerce_single_product_carousel_options', [ $this, 'single_product_carousel_options' ], 10 );
+
+		add_filter( 'wc_get_template', [ $this, 'filter_woo_templates' ], 10, 5 );
 	}   
 
 	/**
@@ -115,8 +117,6 @@ class Fusion_WooCommerce {
 				add_filter( 'woocommerce_is_checkout', '__return_true' );
 			}
 		}
-
-		add_filter( 'wc_get_template', [ $this, 'filter_woo_templates' ], 10 );
 	}
 
 	/**
@@ -139,10 +139,26 @@ class Fusion_WooCommerce {
 	 * Change the template path to bypass Avada regular templates.
 	 *
 	 * @access public
-	 * @param string $template      Template location.
 	 * @since 3.2
+	 * @param string $template Located template path.
+	 * @param string $template_name Template name.
+	 * @param array  $args Template arguments.
+	 * @param string $template_path Template path.
+	 * @param string $default_path Default path.
+	 * @return string
 	 */
-	public function filter_woo_templates( $template = '' ) {
+	public function filter_woo_templates( $template, $template_name, $args, $template_path, $default_path ) {
+		$notice_templates = [
+			'notices/error.php'   => 'block-notices/error.php',
+			'notices/notice.php'  => 'block-notices/notice.php',
+			'notices/success.php' => 'block-notices/success.php',           
+		];
+
+		// Make sure the new block notices templates are used.
+		if ( isset( $notice_templates[ $template_name ] ) && file_exists( $template ) ) {
+			$template = str_replace( $template_name, $notice_templates[ $template_name ], $template );
+		}
+
 		if ( class_exists( 'Avada' ) ) {
 			$avada_path = Avada::$template_dir_path . '/woocommerce/';
 			$woo_path   = wp_normalize_path( WC()->plugin_path() . '/templates/' );

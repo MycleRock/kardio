@@ -1424,6 +1424,7 @@ if ( function_exists( 'fusion_is_element_enabled' ) && fusion_is_element_enabled
 
 				$attr = [
 					'class' => 'awb-carousel awb-swiper awb-swiper-carousel',
+					'style' => $this->get_carousel_inline_style(),
 				];
 
 				if ( 'title_below_image' === self::$static_args['carousel_layout'] ) {
@@ -1883,6 +1884,20 @@ if ( function_exists( 'fusion_is_element_enabled' ) && fusion_is_element_enabled
 					Fusion_Dynamic_JS::enqueue_script( 'lite-vimeo' );
 					Fusion_Dynamic_JS::enqueue_script( 'lite-youtube' );
 				}
+			}
+
+			/**
+			 * Get the carousel inline style.
+			 *
+			 * @since 5.11.5
+			 * @return string
+			 */
+			public function get_carousel_inline_style() {
+				$custom_vars = [
+					'columns' => self::$static_args['columns'],
+				];
+
+				return $this->get_custom_css_vars( $custom_vars );
 			}
 		}
 	}

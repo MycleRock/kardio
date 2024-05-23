@@ -5817,6 +5817,10 @@ var FusionPageBuilder = FusionPageBuilder || {};
 
 				this.values.border_position = 'all' !== this.values.border_position ? '-' + this.values.border_position : '';
 
+				if ( '' === this.values.background_color_hover && '' !== this.values.background_color ) {
+					this.values.background_color_hover = this.values.background_color;
+				}
+
 			},
 
 			validatePercentageMargin: function( value, columnSize, values ) {
@@ -6425,7 +6429,7 @@ var FusionPageBuilder = FusionPageBuilder || {};
 				}
 
 				// Visibility classes.
-				attr = _.fusionVisibilityAtts( this.values.hide_on_mobile, attr );
+				attr[ 'class' ] = _.fusionVisibilityAtts( visibilityValue, attr[ 'class' ] );
 
 				attr[ 'class' ] += _.fusionGetStickyClass( this.values.sticky_display );
 
@@ -23231,6 +23235,11 @@ _.mixin( {
 		// Trim the value.
 		value = 'undefined' === typeof value ? '' : value;
 		value = value.toString().trim();
+
+		if ( value.includes( '--awb' ) || value.includes( 'calc(' ) ) {
+			return value;
+		}
+
 		if ( -1 !== jQuery.inArray( value, [ 'auto', 'inherit', 'initial', '' ] ) ) {
 			return value;
 		}
@@ -25639,7 +25648,8 @@ _.mixin( {
 
 				if ( ! _.isUndefined( attributeKeyValue[ 0 ] ) ) {
 					if ( ! _.isUndefined( attributeKeyValue[ 1 ] ) ) {
-						attributeKeyValue[ 1 ] = attributeKeyValue[ 1 ].trim().replace( /{/g, '[' ).replace( /}/g, ']' ).replace( /'/g, '' ).trim();
+						attributeKeyValue[ 1 ] = attributeKeyValue[ 1 ].trim().replace( /{/g, '[' ).replace( /}/g, ']' ).replace( /'/g, '' ).replace( /&/g, '&amp;' ).replace( /</g, '&lt;' ).replace( />/g, '&gt;' ).replace( /"/g, '&quot;' ).trim();
+
 						if ( 'rel' === attributeKeyValue[ 0 ] ) {
 							attr.rel += ' ' + attributeKeyValue[ 1 ];
 						} else if ( 'string' === typeof attr[ attributeKeyValue[ 0 ] ] ) {
@@ -67731,12 +67741,26 @@ var FusionPageBuilder = FusionPageBuilder || {};
 				this.query_data = atts.query_data;
 				this.setIconDefaults();
 
+				// Validate values.
+				this.validateArgs();
+
 				// Any extras that need passed on.
 				attributes.cid = this.model.get( 'cid' );
 				attributes.wrapperAttr = this.buildAttr( atts.values );
 				attributes.output = this.buildOutput( atts );
 
 				return attributes;
+			},
+
+			/**
+			 * Modify template attributes.
+			 *
+			 * @since 3.5
+			 * @return {void}
+			 */
+			validateArgs: function() {
+				this.values.button_icon = this.values.button_icon.replace( 'fusion-prefix-', '' );
+
 			},
 
 			/**

@@ -38,13 +38,13 @@ class Fusion_Widget_Tweets extends WP_Widget {
 
 		$widget_ops  = [
 			'classname'   => 'tweets',
-			'description' => __( 'Adds your twitter timeline', 'Avada' ),
+			'description' => __( 'Adds your X timeline', 'Avada' ),
 		];
 		$control_ops = [
 			'id_base' => 'tweets-widget',
 		];
 
-		parent::__construct( 'tweets-widget', __( 'Avada: Twitter', 'Avada' ), $widget_ops, $control_ops );
+		parent::__construct( 'tweets-widget', __( 'Avada: X', 'Avada' ), $widget_ops, $control_ops );
 
 	}
 
@@ -278,7 +278,7 @@ class Fusion_Widget_Tweets extends WP_Widget {
 			<?php endif; ?>
 		</script>
 		<?php /* translators: "How to setup the Avada twitter widget." link. */ ?>
-		<p><?php printf( esc_attr__( 'For general setup information or information on how to setup a Twitter App or a Twitter Widget on twitter.com, please see our documentation: %s', 'Avada' ), '<a href="' . esc_url_raw( $twitter_doc_url ) . '" target="_blank" rel="noopener noreferrer">' . esc_attr__( 'How to setup the Avada twitter widget.', 'Avada' ) . '</a>' ); ?></p>
+		<p><?php printf( esc_attr__( 'For general setup information or information on how to setup a X App or a X Widget on X.com, please see our documentation: %s', 'Avada' ), '<a href="' . esc_url_raw( $twitter_doc_url ) . '" target="_blank" rel="noopener noreferrer">' . esc_attr__( 'How to setup the Avada twitter widget.', 'Avada' ) . '</a>' ); ?></p>
 
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title:', 'Avada' ); ?></label>
@@ -288,19 +288,19 @@ class Fusion_Widget_Tweets extends WP_Widget {
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'widget_type' ) ); ?>"><?php esc_html_e( 'Widget Style:', 'Avada' ); ?></label>
 			<select id="<?php echo esc_attr( $this->get_field_id( 'widget_type' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'widget_type' ) ); ?>" class="widefat widget-type-selector" style="width:100%;">
-				<option value="twitter_preconfig_style" <?php selected( $instance['widget_type'], 'twitter_preconfig_style' ); ?>><?php esc_html_e( 'Twitter Preconfigured Style (deprecated)', 'Avada' ); ?></option>
-				<option value="twitter_style" <?php selected( $instance['widget_type'], 'twitter_style' ); ?>><?php esc_html_e( 'Twitter Style', 'Avada' ); ?></option>
+				<option value="twitter_preconfig_style" <?php selected( $instance['widget_type'], 'twitter_preconfig_style' ); ?>><?php esc_html_e( 'X Preconfigured Style (deprecated)', 'Avada' ); ?></option>
+				<option value="twitter_style" <?php selected( $instance['widget_type'], 'twitter_style' ); ?>><?php esc_html_e( 'X Style', 'Avada' ); ?></option>
 				<option value="avada_style" <?php selected( $instance['widget_type'], 'avada_style' ); ?>><?php esc_html_e( 'Avada Style', 'Avada' ); ?></option>
 			</select>
 		</p>
 
 		<p  class="general_option twitter_id">
-			<label for="<?php echo esc_attr( $this->get_field_id( 'twitter_id' ) ); ?>"><?php esc_html_e( 'Twitter Username:', 'Avada' ); ?></label>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'twitter_id' ) ); ?>"><?php esc_html_e( 'X Username:', 'Avada' ); ?></label>
 			<input class="widefat" type="text" id="<?php echo esc_attr( $this->get_field_id( 'twitter_id' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'twitter_id' ) ); ?>" value="<?php echo esc_attr( $instance['twitter_id'] ); ?>" />
 		</p>
 
 		<p class="twitter_style widget_id">
-			<label for="<?php echo esc_attr( $this->get_field_id( 'widget_id' ) ); ?>"><?php esc_html_e( 'Twitter Widget ID:', 'Avada' ); ?></label>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'widget_id' ) ); ?>"><?php esc_html_e( 'X Widget ID:', 'Avada' ); ?></label>
 			<input class="widefat" type="text" id="<?php echo esc_attr( $this->get_field_id( 'widget_id' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'widget_id' ) ); ?>" value="<?php echo esc_attr( $instance['widget_id'] ); ?>" />
 		</p>
 

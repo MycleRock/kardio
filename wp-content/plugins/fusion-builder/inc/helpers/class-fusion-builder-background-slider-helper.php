@@ -212,7 +212,7 @@ class Fusion_Builder_Background_Slider_Helper {
 					[
 						'element'  => 'background_slider_animation',
 						'value'    => 'slide',
-						'operator' => '=',
+						'operator' => '==',
 					],
 				],
 			],
@@ -297,9 +297,7 @@ class Fusion_Builder_Background_Slider_Helper {
 		$attributes = [];
 
 		$attributes[] = 'data-type="' . $type . '"';
-		if ( 'yes' === $atts['background_slider_loop'] ) {
-			$attributes[] = 'data-loop="' . $atts['background_slider_loop'] . '"';
-		}
+		$attributes[] = 'data-loop="' . $atts['background_slider_loop'] . '"';
 
 		if ( ! empty( $atts['background_slider_animation'] ) ) {
 			$attributes[] = 'data-animation="' . esc_attr( $atts['background_slider_animation'] ) . '"';

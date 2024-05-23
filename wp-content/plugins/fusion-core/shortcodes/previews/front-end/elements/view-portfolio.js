@@ -254,7 +254,8 @@ var FusionPageBuilder = FusionPageBuilder || {};
 
 			buildCarouselAttr: function( values ) {
 				var portfolioShortcodeCarousel = {
-					class: 'awb-carousel awb-swiper awb-swiper-carousel'
+					class: 'awb-carousel awb-swiper awb-swiper-carousel',
+					style: this.getCaroStyleVariables( values )
 				};
 
 				if ( 'title_below_image' === values.carousel_layout ) {
@@ -275,6 +276,21 @@ var FusionPageBuilder = FusionPageBuilder || {};
 				portfolioShortcodeCarousel[ 'data-scrollitems' ] = values.scroll_items;
 
 				return portfolioShortcodeCarousel;
+			},
+
+			/**
+			 * Gets carousel style variables.
+			 *
+			 * @since 5.11.5
+			 * @param {Object} values - The values.
+			 * @return {String}
+			 */
+			getCaroStyleVariables: function( values ) {
+				var customVars = [];
+
+				customVars.columns = values.columns;
+
+				return this.getCustomCssVars( customVars );
 			},
 
 			buildFilters: function( values, extras, queryData ) {

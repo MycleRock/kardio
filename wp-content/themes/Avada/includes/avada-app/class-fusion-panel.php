@@ -303,33 +303,23 @@ class Fusion_Panel {
 		check_ajax_referer( 'fusion_load_nonce', 'fusion_load_nonce' );
 
 		$wp_filesystem = Fusion_Helper::init_filesystem();
-		$upload_dir    = wp_upload_dir();
-		$dir_path      = wp_normalize_path( trailingslashit( $upload_dir['basedir'] ) . 'fusion-page-options-export/' );
 		$content_json  = false;
 
 		// If its an uploaded file.
 		if ( isset( $_FILES['po_file_upload'] ) ) {
-			if ( ! isset( $_FILES['po_file_upload']['name'] ) || 'json' !== pathinfo( $_FILES['po_file_upload']['name'], PATHINFO_EXTENSION ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
-				return;
+
+			if ( ! isset( $_FILES['po_file_upload']['name'] ) || ! isset( $_FILES['po_file_upload']['tmp_name'] ) ) {
+				wp_die();
 			}
 
-			$json_file_path = wp_normalize_path( $dir_path . wp_unslash( $_FILES['po_file_upload']['name'] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
-
-			if ( ! file_exists( $dir_path ) ) {
-				wp_mkdir_p( $dir_path );
+			$file_type       = wp_check_filetype_and_ext( $_FILES['po_file_upload']['tmp_name'], $_FILES['po_file_upload']['name'] );
+			$proper_filename = $file_type['proper_filename'] ? $file_type['proper_filename'] : $_FILES['po_file_upload']['tmp_name'];
+	
+			if ( 'json' !== $file_type['ext'] ) {
+				wp_die();
 			}
-
-			if ( ! isset( $_FILES['po_file_upload'] ) || ! isset( $_FILES['po_file_upload']['tmp_name'] ) ) {
-				return;
-			}
-			// We're already checking if defined above.
-			if ( ! $wp_filesystem->move( wp_normalize_path( $_FILES['po_file_upload']['tmp_name'] ), $json_file_path, true ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
-				return;
-			}
-
-			$content_json = $wp_filesystem->get_contents( $json_file_path );
-
-			$wp_filesystem->delete( $json_file_path );
+	
+			$content_json = $wp_filesystem->get_contents( $proper_filename );           
 
 		} elseif ( isset( $_POST['toUrl'] ) ) {
 			$args = [

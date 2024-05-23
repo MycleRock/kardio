@@ -119,7 +119,7 @@ class Fusion_Data {
 				'color' => '#35465c',
 			],
 			'twitter'    => [
-				'label' => 'Twitter',
+				'label' => 'X',
 				'color' => '#000000',
 			],
 			'twitch'     => [

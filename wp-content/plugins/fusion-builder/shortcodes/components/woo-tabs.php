@@ -258,6 +258,7 @@ if ( fusion_is_element_enabled( 'fusion_tb_woo_tabs' ) ) {
 				$content = '';
 				if ( function_exists( 'wc_get_template_html' ) && is_object( $product ) ) {
 					$content = wc_get_template_html( 'single-product/tabs/tabs.php' );
+					$content = str_replace( '<h2>', '<h2 class="fusion-woocommerce-tab-title">', $content );
 				}
 
 				if ( 'no' === $args['show_tab_titles'] ) {

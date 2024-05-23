@@ -208,7 +208,7 @@ $link_target = ( 'yes' === $link_icon_target || 'yes' === $post_links_target || 
 			 */
 			?>
 			<?php if ( $display_woo_rating ) : ?>
-				<?php fusion_wc_get_template( 'loop/rating.php' ); ?>
+				<?php wc_get_template( 'loop/rating.php' ); ?>
 			<?php endif; ?>
 
 			<?php
@@ -217,7 +217,7 @@ $link_target = ( 'yes' === $link_icon_target || 'yes' === $post_links_target || 
 			 */
 			?>
 			<?php if ( $display_woo_price ) : ?>
-				<?php fusion_wc_get_template( 'loop/price.php' ); ?>
+				<?php wc_get_template( 'loop/price.php' ); ?>
 			<?php endif; ?>
 
 			<?php

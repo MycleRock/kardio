@@ -161,10 +161,6 @@
   --awb-button-swatch-color: var(--link_color);
   --awb-button-swatch-color-active: var(--link_hover_color);
   margin: var(--awb-margin-top) var(--awb-margin-right) var(--awb-margin-bottom) var(--awb-margin-left);
-  display: flex;
-  flex-direction: var(--awb-flex-direction);
-  justify-content: var(--awb-justify-content);
-  align-items: var(--awb-align-items);
 }
 .fusion-post-card-cart .fusion-post-card-cart-add-to-cart {
   margin: var(--awb-button-margin-top) var(--awb-button-margin-right) var(--awb-button-margin-bottom) var(--awb-button-margin-left);
@@ -184,6 +180,7 @@
   flex-direction: var(--awb-button-flex-direction);
   align-items: var(--awb-button-align-items);
   justify-content: var(--awb-button-justify-content);
+  width: 100%;
 }
 .fusion-post-card-cart .fusion-post-card-cart-button-wrapper a {
   justify-content: var(--awb-button-a-justify-content);

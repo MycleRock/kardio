@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="avada-db-card avada-db-welcome<?php echo ( Avada()->registration->is_registered() ? ' hidden' : '' ); ?>">
 			<div class="avada-db-card-caption">
 				<?php /* translators: %s: user name */ ?>
-				<h1 class="avada-db-welcome-heading"><?php printf( apply_filters( 'avada_admin_welcome_title', __( 'Welcome To Avada, %s!', 'Avada' ) ), esc_html( ucfirst( $the_user->display_name ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></h1>
+				<h1 class="avada-db-welcome-heading"><?php echo esc_html( apply_filters( 'avada_admin_welcome_title', sprintf( __( 'Welcome To Avada, %s!', 'Avada' ), ucfirst( $the_user->display_name ) ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></h1>
 				<p class="avada-db-welcome-text"><?php echo esc_html( apply_filters( 'avada_admin_setup_welcome_text', __( 'We recommend that you set up your website with the Avada Setup Wizard; the easiest way to get started.', 'Avada' ) ) ); ?></p>
 			</div>
 			<div class="avada-db-card-image">
@@ -1029,7 +1029,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 			<div class="awb-setup-wizard-notice info">
 				<p><?php esc_html_e( 'Create a support account in order to submit tickets and manage your licenses.', 'Avada' ); ?></p>
-				<a href="https://my.avada.com/register/?purchase_code=<?php echo esc_url( Avada()->registration->get_purchase_code() ); ?>" rel="noopener noreferrer" target="_blank" class="button button-primary"><?php esc_html_e( 'Create an Account', 'Avada' ); ?></a>
+				<a href="https://my.avada.com/register/?purchase_code=<?php echo esc_url( Avada()->registration->get_purchase_code() ); ?>" rel="noopener noreferrer" target="_blank" class="button button-primary"><?php esc_html_e( 'Create My Avada Account', 'Avada' ); ?></a>
 			</div>
 			<h3><?php esc_html_e( 'We Are Here To Help', 'Avada' ); ?></h3>
 			<div class="link-grid">

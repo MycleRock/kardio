@@ -415,7 +415,7 @@ class Fusion_Form_Builder {
 		check_ajax_referer( 'fusion_entry_nonce', 'fusion_entry_nonce' );
 
 		if ( isset( $_POST['entry'] ) && AWB_Access_Control::wp_user_can_for_post( 'fusion_form', 'delete_others_posts' ) ) {
-			$entry_id    = sanitize_text_field( wp_unslash( $_POST['entry'] ) );
+			$entry_id    = (int) sanitize_text_field( wp_unslash( $_POST['entry'] ) );
 			$submissions = new Fusion_Form_DB_Submissions();
 
 			$submissions->delete( $entry_id );

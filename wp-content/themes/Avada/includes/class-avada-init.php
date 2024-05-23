@@ -394,7 +394,7 @@ class Avada_Init {
 		// Add new fields.
 		$profile_fields['author_email']    = 'Email (Author Page)';
 		$profile_fields['author_facebook'] = 'Facebook (Author Page)';
-		$profile_fields['author_twitter']  = 'Twitter (Author Page)';
+		$profile_fields['author_twitter']  = 'X (Author Page)';
 		$profile_fields['author_linkedin'] = 'LinkedIn (Author Page)';
 		$profile_fields['author_dribble']  = 'Dribble (Author Page)';
 		$profile_fields['author_whatsapp'] = 'WhatsApp (Author Page)';

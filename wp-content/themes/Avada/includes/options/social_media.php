@@ -830,7 +830,7 @@ function avada_options_section_social_media( $sections ) {
 						'multi'                  => true,
 						'choices'                => [
 							'facebook'  => esc_html__( 'Facebook', 'Avada' ),
-							'twitter'   => esc_html__( 'Twitter', 'Avada' ),
+							'twitter'   => esc_html__( 'X', 'Avada' ),
 							'reddit'    => esc_html__( 'Reddit', 'Avada' ),
 							'linkedin'  => esc_html__( 'LinkedIn', 'Avada' ),
 							'whatsapp'  => esc_html__( 'WhatsApp', 'Avada' ),

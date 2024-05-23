@@ -29,23 +29,6 @@ if ( fusion_is_element_enabled( 'fusion_form_recaptcha' ) ) {
 			}
 
 			/**
-			 * Sets the necessary scripts.
-			 *
-			 * @access public
-			 * @since 3.2
-			 */
-			public function on_first_render() {
-
-				// On first render is also called for live editor so when you add the element.  We don't need that here.
-				if ( null === $this->args || empty( $this->args ) ) {
-					return;
-				}
-
-				// Add reCAPTCHA script.
-				AWB_Recaptcha_Helper::enqueue_scripts();
-			}
-
-			/**
 			 * Gets the default values.
 			 *
 			 * @static
@@ -73,8 +56,7 @@ if ( fusion_is_element_enabled( 'fusion_form_recaptcha' ) ) {
 			 * @return string
 			 */
 			public function render_input_field( $content ) {
-
-				$params          = [
+				$params = [
 					'color_theme'    => $this->args['color_theme'],
 					'badge_position' => $this->args['badge_position'],
 					'tab_index'      => $this->args['tab_index'],
@@ -82,12 +64,11 @@ if ( fusion_is_element_enabled( 'fusion_form_recaptcha' ) ) {
 					'element'        => 'form',
 					'wrapper_class'  => 'fusion-form-recaptcha-wrapper',
 				];
-				$fusion_settings = awb_get_fusion_settings();
 
 				ob_start();
 				?>
 				<div <?php echo FusionBuilder::attributes( 'recaptcha-shortcode' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> >
-					<?php AWB_Recaptcha_Helper::render_field( $params ); ?>
+					<?php class_exists( 'AWB_Google_Recaptcha' ) ? AWB_Google_Recaptcha::get_instance()->render_field( $params ) : ''; ?>
 				</div>
 				<?php
 				$recaptcha_content = ob_get_clean();
@@ -223,21 +204,21 @@ function fusion_form_recaptcha() {
 						'heading'     => esc_attr__( 'Tab Index', 'fusion-builder' ),
 						'param_name'  => 'tab_index',
 						'value'       => '',
-						'description' => esc_attr__( 'Tab index for this input field.', 'fusion-builder' ),
+						'description' => esc_attr__( 'Tab index for the form field.', 'fusion-builder' ),
 					],
 					[
 						'type'        => 'textfield',
 						'heading'     => esc_attr__( 'CSS Class', 'fusion-builder' ),
 						'param_name'  => 'class',
 						'value'       => '',
-						'description' => esc_attr__( 'Add a class for the input field.', 'fusion-builder' ),
+						'description' => esc_attr__( 'Add a class for the form field.', 'fusion-builder' ),
 					],
 					[
 						'type'        => 'textfield',
 						'heading'     => esc_attr__( 'CSS ID', 'fusion-builder' ),
 						'param_name'  => 'id',
 						'value'       => '',
-						'description' => esc_attr__( 'Add an ID for the input field.', 'fusion-builder' ),
+						'description' => esc_attr__( 'Add an ID for the form field.', 'fusion-builder' ),
 					],
 				],
 			]

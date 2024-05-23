@@ -217,7 +217,7 @@ if ( fusion_is_element_enabled( 'fusion_featured_products_slider' ) && class_exi
 						$image_data           = fusion_get_image_data( get_the_ID(), $featured_image_sizes, get_permalink( get_the_ID() ) );
 
 						ob_start();
-						fusion_wc_get_template( 'loop/price.php' );
+						wc_get_template( 'loop/price.php' );
 						$price = ob_get_clean();
 
 						$return_data['products'][] = [
@@ -341,7 +341,7 @@ if ( fusion_is_element_enabled( 'fusion_featured_products_slider' ) && class_exi
 									$image .= ob_get_clean();
 
 									ob_start();
-									fusion_wc_get_template( 'loop/price.php' );
+									wc_get_template( 'loop/price.php' );
 									$image .= '<div class="fusion-carousel-price">' . ob_get_clean() . '</div>';
 								}
 

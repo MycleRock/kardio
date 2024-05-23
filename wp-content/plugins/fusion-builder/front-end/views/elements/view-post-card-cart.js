@@ -71,12 +71,26 @@ var FusionPageBuilder = FusionPageBuilder || {};
 				this.query_data = atts.query_data;
 				this.setIconDefaults();
 
+				// Validate values.
+				this.validateArgs();
+
 				// Any extras that need passed on.
 				attributes.cid = this.model.get( 'cid' );
 				attributes.wrapperAttr = this.buildAttr( atts.values );
 				attributes.output = this.buildOutput( atts );
 
 				return attributes;
+			},
+
+			/**
+			 * Modify template attributes.
+			 *
+			 * @since 3.5
+			 * @return {void}
+			 */
+			validateArgs: function() {
+				this.values.button_icon = this.values.button_icon.replace( 'fusion-prefix-', '' );
+
 			},
 
 			/**

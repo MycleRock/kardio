@@ -641,7 +641,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</tr>
 				<tr>
 					<td data-export-label="WP Remote Get"><?php esc_html_e( 'WP Remote Get:', 'Avada' ); ?></td>
-					<td class="help"><?php echo '<a href="#" class="help_tip" data-tip="' . esc_attr__( 'Avada uses this method to communicate with different APIs, e.g. Google, Twitter, Facebook.', 'Avada' ) . '">[?]</a>'; ?></td>
+					<td class="help"><?php echo '<a href="#" class="help_tip" data-tip="' . esc_attr__( 'Avada uses this method to communicate with different APIs, e.g. Google, X, Facebook.', 'Avada' ) . '">[?]</a>'; ?></td>
 					<?php
 					$response = wp_safe_remote_get(
 						'https://build.envato.com/api/',
@@ -655,7 +655,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</tr>
 				<tr>
 					<td data-export-label="WP Remote Post"><?php esc_attr_e( 'WP Remote Post:', 'Avada' ); ?></td>
-					<td class="help"><?php echo '<a href="#" class="help_tip" data-tip="' . esc_attr__( 'Avada uses this method to communicate with different APIs, e.g. Google, Twitter, Facebook.', 'Avada' ) . '">[?]</a>'; ?></td>
+					<td class="help"><?php echo '<a href="#" class="help_tip" data-tip="' . esc_attr__( 'Avada uses this method to communicate with different APIs, e.g. Google, X, Facebook.', 'Avada' ) . '">[?]</a>'; ?></td>
 					<?php
 					$response = wp_safe_remote_post(
 						'https://www.google.com/recaptcha/api/siteverify',

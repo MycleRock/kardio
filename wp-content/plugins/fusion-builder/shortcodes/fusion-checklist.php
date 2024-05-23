@@ -381,7 +381,7 @@ if ( fusion_is_element_enabled( 'fusion_checklist' ) ) {
 			 */
 			public function render_child( $args, $content = '' ) {
 				$this->defaults = self::get_element_defaults( 'child' );
-				$defaults       = shortcode_atts( self::get_element_defaults( 'child' ), $args, 'fusion_li_item' );
+				$defaults       = FusionBuilder::set_shortcode_defaults( self::get_element_defaults( 'child' ), $args, 'fusion_li_item' );
 				$content        = apply_filters( 'fusion_shortcode_content', $content, 'fusion_li_item', $args );
 
 				$this->child_args = $defaults;

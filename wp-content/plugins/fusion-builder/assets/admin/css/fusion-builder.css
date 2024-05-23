@@ -539,6 +539,9 @@ body.wp-admin.fusion-builder-enabled .fusion-builder-upload-button:hover,
 .fusion-upload-image .fusion-builder-upload-button:hover {
   background: #fbf9f9;
 }
+.fusion-upload-image .fusion-builder-upload-button {
+  float: right;
+}
 body.wp-admin.fusion-builder-enabled .upload-image-remove,
 .upload-image-remove {
   margin: 1em 1em 0 0 !important;

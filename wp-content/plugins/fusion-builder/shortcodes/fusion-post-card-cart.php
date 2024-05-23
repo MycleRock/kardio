@@ -400,7 +400,31 @@ if ( fusion_is_element_enabled( 'fusion_post_card_cart' ) ) {
 				if ( function_exists( 'wc_enqueue_js' ) && function_exists( 'fusion_is_post_card' ) && fusion_is_post_card() && 'yes' === $this->args['show_variations'] ) {
 					$this->enqueue_wc_variation_js( '.fusion-post-card-cart' );
 				}
-			}
+
+				if ( class_exists( 'Avada' ) && class_exists( 'WooCommerce' ) && 'yes' === $this->args['show_variations'] ) {
+					global $avada_woocommerce;
+
+					$js_folder_suffix = FUSION_BUILDER_DEV_MODE ? '/assets/js' : '/assets/min/js';
+					$js_folder_url    = Avada::$template_dir_url . $js_folder_suffix;
+					$js_folder_path   = Avada::$template_dir_path . $js_folder_suffix;
+					$version          = Avada::get_theme_version();
+
+					Fusion_Dynamic_JS::enqueue_script(
+						'avada-woo-products',
+						$js_folder_url . '/general/avada-woo-products.js',
+						$js_folder_path . '/general/avada-woo-products.js',
+						[ 'jquery', 'fusion-flexslider' ],
+						$version,
+						true
+					);
+
+					Fusion_Dynamic_JS::localize_script(
+						'avada-woo-products',
+						'avadaWooCommerceVars',
+						$avada_woocommerce::get_avada_wc_vars()
+					);
+				}				
+			}		
 
 			/**
 			 * Fires after post cards rendered.
@@ -563,7 +587,7 @@ if ( fusion_is_element_enabled( 'fusion_post_card_cart' ) ) {
 			public function add_quantity_wrapper() {
 				global $product;
 
-				$show_quantity = 'yes' === $this->args['show_quantity_input'] && $product->is_purchasable() && $product->is_in_stock();
+				$show_quantity = 'yes' === $this->args['show_quantity_input'] && $product->is_purchasable();
 				?>
 					<?php if ( apply_filters( 'fusion_cart_show_quantity', $show_quantity, $this->args ) ) { ?>
 						<div class="awb-post-card-cart-cart-wrapper">
@@ -603,7 +627,7 @@ if ( fusion_is_element_enabled( 'fusion_post_card_cart' ) ) {
 					<?php
 				}
 
-				$show_quantity = 'yes' === $this->args['show_quantity_input'] && $product->is_purchasable() && $product->is_in_stock();
+				$show_quantity = 'yes' === $this->args['show_quantity_input'] && $product->is_purchasable();
 				if ( ( ( 'yes' === $this->args['show_variations'] && $product->is_type( 'variable' ) ) || $product->is_type( 'simple' ) ) && apply_filters( 'fusion_cart_show_quantity', $show_quantity, $this->args ) ) { ?>
 					</div>
 				<?php }

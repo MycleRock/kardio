@@ -163,31 +163,33 @@ class AWB_Studio_Admin {
 							<i class="fusiona-element"></i>
 							<span><?php esc_html_e( 'Elements', 'fusion-builder' ); ?></span>
 						</li>
-						<li data-type="post_cards">
-							<i class="fusiona-post-cards-element"></i>
-							<span><?php esc_html_e( 'Post Cards', 'fusion-builder' ); ?></span>
-						</li>
-						<li data-type="mega_menus">
-							<i class="fusiona-mega-menu"></i>
-							<span><?php esc_html_e( 'Mega Menus', 'fusion-builder' ); ?></span>
-						</li>
-					<?php endif; ?>
-					<?php if ( apply_filters( 'awb_dashboard_menu_cpt', true, 'fusion_icons' ) ) : ?>
+						<?php if ( apply_filters( 'awb_dashboard_menu_cpt', true, 'fusion_icons' ) ) : ?>
 						<li data-type="icons">
 							<i class="fusiona-icons"></i>
 							<span><?php esc_html_e( 'Icons', 'fusion-builder' ); ?></span>
 						</li>
-					<?php endif; ?>
-					<?php if ( false !== Fusion_Form_Builder::is_enabled() && apply_filters( 'awb_dashboard_menu_cpt', true, 'fusion_form' ) ) : ?>
-						<li data-type="forms">
-							<i class="fusiona-avada-form-element"></i>
-							<span><?php esc_html_e( 'Forms', 'fusion-builder' ); ?></span>
+						<?php endif; ?>
+						<?php if ( false !== Fusion_Form_Builder::is_enabled() && apply_filters( 'awb_dashboard_menu_cpt', true, 'fusion_form' ) ) : ?>
+							<li data-type="forms">
+								<i class="fusiona-avada-form-element"></i>
+								<span><?php esc_html_e( 'Forms', 'fusion-builder' ); ?></span>
+							</li>
+						<?php endif; ?>			
+						<li data-type="post_cards">
+							<i class="fusiona-post-cards-element"></i>
+							<span><?php esc_html_e( 'Post Cards', 'fusion-builder' ); ?></span>
 						</li>
 					<?php endif; ?>
 					<?php if ( false !== AWB_Off_Canvas::is_enabled() && apply_filters( 'awb_dashboard_menu_cpt', true, 'awb_off_canvas' ) ) : ?>
 						<li data-type="awb_off_canvas">
 							<i class="fusiona-off-canvas"></i>
 							<span><?php esc_html_e( 'Off Canvas', 'fusion-builder' ); ?></span>
+						</li>
+					<?php endif; ?>
+					<?php if ( apply_filters( 'awb_dashboard_menu_cpt', true, 'avada_library' ) ) : ?>
+						<li data-type="mega_menus">
+							<i class="fusiona-mega-menu"></i>
+							<span><?php esc_html_e( 'Mega Menus', 'fusion-builder' ); ?></span>
 						</li>
 					<?php endif; ?>
 				</ul>

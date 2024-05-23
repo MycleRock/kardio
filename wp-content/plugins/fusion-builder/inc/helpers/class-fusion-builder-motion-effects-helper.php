@@ -509,13 +509,6 @@ class Fusion_Builder_Motion_Effects_Helper {
 				'group'       => esc_attr__( 'Extras', 'fusion-builder' ),
 				'value'       => fusion_builder_visibility_options( 'full' ),
 				'default'     => fusion_builder_default_visibility( 'array' ),
-				'dependency'  => [
-					[
-						'element'  => 'motion_effects',
-						'value'    => '',
-						'operator' => '!=',
-					],
-				],
 			],
 		];
 
@@ -554,7 +547,7 @@ class Fusion_Builder_Motion_Effects_Helper {
 			Fusion_Dynamic_JS::enqueue_script( 'fusion-motion-effects' );
 		}
 
-		if ( ! empty( $args['data-scroll-devices'] ) ) {
+		if ( ! empty( $args['scroll_motion_devices'] ) ) {
 			$attr['data-scroll-devices'] = $args['scroll_motion_devices'];
 		}
 

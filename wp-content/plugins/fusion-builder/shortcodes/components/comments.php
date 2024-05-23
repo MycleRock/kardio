@@ -37,7 +37,6 @@ if ( fusion_is_element_enabled( 'fusion_tb_comments' ) ) {
 
 				// Ajax mechanism for live editor.
 				add_action( 'wp_ajax_get_' . $this->shortcode_handle, [ $this, 'ajax_render' ] );
-				add_action( 'pre_comment_on_post', [ $this, 'check_recaptcha' ] );
 			}
 
 			/**
@@ -172,21 +171,12 @@ if ( fusion_is_element_enabled( 'fusion_tb_comments' ) ) {
 				// Add filter to load template from FB.
 				add_filter( 'comments_template', [ $this, 'template' ] );
 
-				// Add filter to check if recaptcha needs to be added.
-				if ( ! is_user_logged_in() && $fusion_settings->get( 'recaptcha_comment_form' ) ) {
-					add_action( 'comment_form_after_fields', [ $this, 'render_recaptcha' ] );
-				}
-
 				set_query_var( 'fusion_tb_comments_args', $this->args );
 
 				comments_template();
 
 				// Remove filter.
 				remove_filter( 'comments_template', [ $this, 'template' ] );
-
-				if ( ! is_user_logged_in() && $fusion_settings->get( 'recaptcha_comment_form' ) ) {
-					remove_action( 'comment_form_after_fields', [ $this, 'render_recaptcha' ] );
-				}
 
 				$content .= ob_get_clean();
 
@@ -338,82 +328,6 @@ if ( fusion_is_element_enabled( 'fusion_tb_comments' ) ) {
 			}
 
 			/**
-			 * Render comment recaptcha html.
-			 *
-			 * @access public
-			 * @since 3.10
-			 * @return void
-			 */
-			public function render_recaptcha() {
-
-				AWB_Recaptcha_Helper::render_field(
-					[
-						'counter'       => $this->counter,
-						'element'       => 'comments',
-						'wrapper_class' => 'form-creator-recaptcha',
-					]
-				);
-
-				$recaptcha_error = ( isset( $_GET['recaptcha_error'] ) && '' !== $_GET['recaptcha_error'] ) ? sanitize_text_field( wp_unslash( $_GET['recaptcha_error'] ) ) : '';  // phpcs:ignore WordPress.Security.NonceVerification
-				$type            = ( isset( $_GET['type'] ) && '' !== $_GET['type'] ) ? sanitize_text_field( wp_unslash( $_GET['type'] ) ) : '';  // phpcs:ignore WordPress.Security.NonceVerification	
-				if ( $recaptcha_error && $type ) {
-					echo do_shortcode( '[fusion_alert margin_top="20px" type="' . $type . '"]' . $recaptcha_error . '[/fusion_alert]' );
-				}
-			}
-
-			/**
-			 * Check reCAPTCHA.
-			 *
-			 * @since 3.3
-			 * @access private
-			 * @param string $post_id current post id.
-			 * @return void
-			 */
-			public function check_recaptcha( $post_id ) {
-				$fusion_settings = awb_get_fusion_settings();
-				if ( $fusion_settings->get( 'recaptcha_comment_form' ) && ! isset( $_POST['g-recaptcha-response'] ) && empty( $_POST['g-recaptcha-response'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-					wp_safe_redirect(
-						add_query_arg(
-							[
-								'type'            => 'error',
-								'recaptcha_error' => __( 'Sorry, ReCaptcha could not verify that you are a human. Please try again.', 'fusion-builder' ),
-							],
-							esc_url( get_permalink( $post_id ) )
-						)
-					);
-					exit;
-				}
-				if ( $fusion_settings->get( 'recaptcha_comment_form' ) && ! is_user_logged_in() && isset( $_POST['g-recaptcha-response'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-					if ( $fusion_settings->get( 'recaptcha_public' ) && $fusion_settings->get( 'recaptcha_private' ) ) {
-						$response = AWB_Recaptcha_Helper::verify();
-						if ( is_array( $response ) && $response['has_error'] && $response['message'] ) {
-							wp_safe_redirect(
-								add_query_arg(
-									[
-										'type'            => 'error',
-										'recaptcha_error' => $response['message'],
-									],
-									esc_url( get_permalink( $post_id ) )
-								)
-							);
-							exit;
-						}
-					} else {
-						wp_safe_redirect(
-							add_query_arg(
-								[
-									'type'            => 'error',
-									'recaptcha_error' => esc_html__( 'reCAPTCHA configuration error. Please check the Global Options settings and your reCAPTCHA account settings.', 'fusion-builder' ),
-								],
-								esc_url( get_permalink( $post_id ) )
-							)
-						);
-						exit;
-					}
-				}
-			}
-
-			/**
 			 * Load comments template from Avada Builder.
 			 *
 			 * @since 2.2
@@ -434,23 +348,6 @@ if ( fusion_is_element_enabled( 'fusion_tb_comments' ) ) {
 			 */
 			public function add_css_files() {
 				FusionBuilder()->add_element_css( FUSION_BUILDER_PLUGIN_DIR . 'assets/css/components/comments.min.css' );
-			}
-
-			/**
-			 * Sets the necessary scripts.
-			 *
-			 * @access public
-			 * @since 3.2
-			 */
-			public function on_first_render() {
-
-				// On first render is also called for live editor so when you add the element.  We don't need that here.
-				if ( null === $this->args || empty( $this->args ) ) {
-					return;
-				}
-
-				// Add reCAPTCHA script.
-				AWB_Recaptcha_Helper::enqueue_scripts();
 			}
 		}
 	}

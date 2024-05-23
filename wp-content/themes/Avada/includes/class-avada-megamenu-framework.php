@@ -521,7 +521,7 @@ if ( ! class_exists( 'Avada_Megamenu_Framework' ) ) {
 					'label'       => esc_html__( 'Off Canvas', 'Avada' ),
 					'description' => esc_html__( 'Select off canvas to show when click on menu item.', 'Avada' ),
 					'type'        => $off_canvas_field_type,
-					'choices'     => array_merge( $off_canvas_items, $off_canvas_available_items ),
+					'choices'     => $off_canvas_items + $off_canvas_available_items,
 					'post_type'   => 'awb_off_canvas',
 					'save_id'     => 'fusion_off_canvas_id',
 					'dependency'  => [

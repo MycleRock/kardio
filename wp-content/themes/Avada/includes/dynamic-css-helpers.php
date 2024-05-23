@@ -154,7 +154,7 @@ function avada_get_body_typography_elements() {
 		'body',
 		'.post .post-content',
 		'.sidebar .jtwt',
-		'#wrapper .meta',
+		'.fusion-body .fusion-wrapperr .meta',
 		'.review blockquote div',
 		'.search input',
 		'.project-content .project-info h4',

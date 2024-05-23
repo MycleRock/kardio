@@ -7,6 +7,86 @@ This is why we highly recommend to stay up to date with each new theme version a
 
 
 -----------------------------------------------------------------------------------------
+Version 7.11.7 - March 19th, 2024
+-----------------------------------------------------------------------------------------
+
+
+- SECURITY: Fixed Contributor+-level-only XSS vulnerability, allowing site Contributors to add custom script code certain element link options
+- SECURITY: Fixed Contributor+-level-only SSRF vulnerability, allowing Contributors to set Avada Form submission type to unsafe web requests
+- SECURITY: Fixed Admin+-level-only SQL injection vulnerability, where SQL code could be injected into an Avada Forms submissions entry removal request
+- SECURITY: Fixed possibility of Avada Forms upload folder being directly accessible
+- NEW: Added the option to bulk delete Avada Forms submission entries
+- NEW: Added video facade thumbnail image size option to the YouTube element
+- PERFORMANCE: SVG attachments with missing size metadata will now get the size set if possible, to avoid additional HTTP requests
+- IMPROVEMENT: Made the option to exclude out of stock products to all WooCommerce relevant source types in Post Card element
+- IMPROVEMENT: Added possibility to use placeholders in the Avada Forms CC and BCC fields
+- UPDATED: Removed legacy add-ons from the Avada Dashboard plugins screen
+- FIXED: Border options not working in Column element when using a background slider
+- FIXED: WooCommerce default shop loop not displaying categories when set to do in Customizer
+- FIXED: WooCommerce legacy notices icons not displaying correctly
+- FIXED: WooCommerce variable product not being added to cart when using Post Card Cart element in Post Cards on a single product post
+- FIXED: ACF relationships used as post source don't set the WooCommerce product post type if used in Post Card element leading to interaction issues 
+- FIXED: Post Card element displaying products through secondary choice (upsells, cross-sells, etc.) when clicking on variation, changing main product thumbnail if displayed on single product page
+- FIXED: Additional metadata being cut off, in Meta element, when displaying posts with empty tags or categories
+- FIXED: Subpixel issue with slant type of Section Separator element
+- FIXED: Lightbox triggered from rollover not always working in carousel layouts
+- FIXED: Open Graph image meta tag causing fatal error on front-end on a fresh install if no image and no logo is set
+- FIXED: Column element background hover color being incorrect in Live Editor when no explicit background hover color was set
+- FIXED: Container & Column background image slider preview breaking at times in Live Editor when changing related options
+
+
+-----------------------------------------------------------------------------------------
+Version 7.11.6 - February 27th, 2024
+-----------------------------------------------------------------------------------------
+
+
+- SECURITY: Fixed Avada Forms database submissions entries being viewable at contributor user role level by default
+- NEW: Added title and description Page Options, to easily set title and description page meta tags and open graph meta tags
+- NEW: Added dynamic data options (ACF color) for all color options
+- PERFORMANCE: Removed wc-functions.php and handling for very old, deprecated WooCommerce functions
+- IMPROVEMENT: Added the new button hover transitions and icon dynamic data to the Submit Button element
+- IMPROVEMENT: Updated several option descriptions, dependencies, and dialogs for better usability
+- UPDATED: Compatibility with WooCommerce 8.6.1
+- FIXED: WooCommerce notices styling that was broken by WooCommerce 8.6
+- FIXED: WooCommerce products shortcode columns not working correctly on a shop page that uses a layout
+- FIXED: WooCommerce product review and legacy comment form submission breaking when using reCAPTCHA for comments
+- FIXED: WooCommerce Product Image element changing to incorrect image, when changing a product variation inside of a Post Cards element on a single product page
+- FIXED: WooCommerce Post Card Cart button stretch option not working in stacked mode
+- FIXED: Motion effects device-specific option not working
+- FIXED: Background images set in Column element not having the image ID stored, leading to a more expensive lookup
+- FIXED: Dynamic data not working on Checklist element children
+- FIXED: Avada Forms Text Field with name "s" (for search field functionality) not respecting all form field styles
+- FIXED: Load More button in Post Cards element sometimes not correctly disappearing once all posts have been loaded
+- FIXED: Device type rendering logic not working in Column element LE when using "not equal" comparison 
+
+
+-----------------------------------------------------------------------------------------
+Version 7.11.5 - February 12th, 2024
+-----------------------------------------------------------------------------------------
+
+
+- SECURITY: Fixed file upload bypass leading to remote code execution (RCE) vulnerability in Page Options import function (only valid for authenticated users of rol contributor or higher)
+- PERFORMANCE: Removed conditionally loaded WooCommerce block styles from the combined 3rd party styles
+- IMPROVEMENT: Added option to Post Card element to exclude out-of-stock items from related products query
+- IMPROVEMENT: Added new actions and filters for better customizability
+- UPDATED: Twitter name to X
+- FIXED: WooCommerce notices not being displayed on all installs when Ajax add to cart is used on single products
+- FIXED: Woo Tabs element title options not working for all tab titles and review meta text color being incorrect
+- FIXED: Non-scrolling Column motion effects not animating
+- FIXED: Off Canvas special menu element not working
+- FIXED: Off Canvas not always closing correctly on mobiles (part 2)
+- FIXED: Not all Testimonial elements auto-playing when multiple elements are on the same page
+- FIXED: Carousels not correctly initialized inside of a Modal element
+- FIXED: Portfolio element carousel layout displaying incorrect number of elements
+- FIXED: Font-size sanitation issue in responsive type calculations, when a global typography was deleted but still used in an element
+- FIXED: PHP notice in WooCommerce edit order screens and other post types that don't have a global $post variable
+- FIXED: Bulk upload options not displaying in back-end editor
+- FIXED: Container background slider in Live Editor causes child elements to disappear when the edit icons are hovered on some installs
+- FIXED: Invalid column spacing sanitization in Live Editor
+- FIXED: Custom icons not displaying in Live Editor when changing them for the add to cart button in Post Card Cart element
+
+
+-----------------------------------------------------------------------------------------
 Version 7.11.4 - January 30th, 2024
 -----------------------------------------------------------------------------------------
 

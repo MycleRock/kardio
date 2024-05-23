@@ -17,6 +17,8 @@
   right: 1em;
   font-size: inherit !important;
   background: transparent !important;
+  display: flex;
+  align-items: center;
 }
 .fusion-form-form-wrapper .fusion-form-field .fusion-select-wrapper .select-arrow svg path {
   stroke: var(--awb-form-text-color);

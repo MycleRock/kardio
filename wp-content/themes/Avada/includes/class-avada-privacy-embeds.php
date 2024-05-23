@@ -295,7 +295,7 @@ class Avada_Privacy_Embeds {
 				],
 				'twitter'    => [
 					'search' => 'twitter.com',
-					'label'  => esc_attr__( 'Twitter', 'Avada' ),
+					'label'  => esc_attr__( 'X', 'Avada' ),
 				],
 				'gmaps'      => [
 					'search' => [

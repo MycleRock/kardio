@@ -80,7 +80,6 @@ require_once FUSION_BUILDER_PLUGIN_DIR . 'inc/helpers/class-fusion-builder-patte
 require_once FUSION_BUILDER_PLUGIN_DIR . 'inc/helpers/class-fusion-builder-mask-helper.php';
 require_once FUSION_BUILDER_PLUGIN_DIR . 'inc/helpers/class-fusion-builder-motion-effects-helper.php';
 require_once FUSION_BUILDER_PLUGIN_DIR . 'inc/class-fusion-builder-element-helper.php';
-require_once FUSION_BUILDER_PLUGIN_DIR . 'inc/helpers/class-awb-recaptcha-helper.php';
 require_once FUSION_BUILDER_PLUGIN_DIR . 'inc/helpers/class-fusion-builder-background-slider-helper.php';
 
 // Nav walker for the menu element.

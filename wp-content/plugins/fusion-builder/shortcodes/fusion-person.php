@@ -1656,8 +1656,8 @@ function fusion_element_person() {
 			],
 			[
 				'type'         => 'textfield',
-				'heading'      => esc_attr__( 'Twitter Link', 'fusion-builder' ),
-				'description'  => esc_attr__( 'Insert your custom Twitter link.', 'fusion-builder' ),
+				'heading'      => esc_attr__( 'X Link', 'fusion-builder' ),
+				'description'  => esc_attr__( 'Insert your custom X link.', 'fusion-builder' ),
 				'param_name'   => 'twitter',
 				'value'        => '',
 				'dynamic_data' => true,

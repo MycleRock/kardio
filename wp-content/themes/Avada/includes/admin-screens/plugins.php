@@ -33,7 +33,6 @@ if ( ! $wp_api_plugins ) {
 		'wordpress-seo'       => 'wordpress-seo/wp-seo.php',
 		'leadin'              => 'leadin/leadin.php',
 		'bbpress'             => 'bbpress/bbpress.php',
-		'contact-form-7'      => 'contact-form-7/wp-contact-form-7',
 	];
 	$wp_api_plugins = [];
 	foreach ( $wp_org_plugins as $slug => $path ) { // phpcs:ignore WordPress.WP.GlobalVariablesOverride
@@ -43,6 +42,8 @@ if ( ! $wp_api_plugins ) {
 				'slug' => $slug,
 			]
 		);
+		unset( $wp_api_plugins[ $slug ]['contributors'] );
+		unset( $wp_api_plugins[ $slug ]['sections'] );
 	}
 	set_site_transient( 'fusion_wordpress_org_plugins', $wp_api_plugins, 15 * MINUTE_IN_SECONDS );
 }
@@ -197,107 +198,5 @@ if ( ! $wp_api_plugins ) {
 		</div>
 
 		<div id="dialog-plugin-confirm" title="<?php esc_attr_e( 'Error ', 'Avada' ); ?>"></div>
-	</section>
-
-	<section class="avada-db-card avada-db-addons-start">
-		<h1 class="avada-db-demos-heading"><?php esc_html_e( 'Get Avada Add-ons', 'Avada' ); ?></h1>
-		<p><?php esc_html_e( 'The Avada Website Builder ecosystem offers a variety of third-party add-ons that extend core features and deliver tailored solutions for specific tasks.', 'Avada' ); ?></p>
-
-		<div class="avada-db-card-notice">
-			<i class="fusiona-info-circle"></i>
-			<p class="avada-db-card-notice-heading">
-				<?php esc_html_e( 'Add-ons are only supported by the author who created them.', 'Avada' ); ?>
-			</p>
-		</div>
-	</section>
-
-	<section class="avada-db-plugins-themes avada-install-plugins avada-install-addons avada-db-card">
-		<div class="feature-section theme-browser rendered">
-			<?php
-			$addons_json = ( isset( $_GET['reset_transient'] ) ) ? false : get_site_transient( 'avada_addons_json' ); // phpcs:ignore WordPress.Security.NonceVerification
-			if ( ! $addons_json ) {
-				$response    = wp_remote_get(
-					FUSION_UPDATES_URL . '/fusion_builder_addon/',
-					[
-						'timeout'    => 30,
-						'user-agent' => 'fusion-builder',
-					]
-				);
-				$addons_json = wp_remote_retrieve_body( $response );
-				set_site_transient( 'avada_addons_json', $addons_json, 300 );
-			}
-			$addons = json_decode( $addons_json, true );
-			// Move coming_soon to the end.
-			if ( isset( $addons['415041'] ) ) {
-				$coming_soon = $addons['415041'];
-				unset( $addons['415041'] );
-				$addons['coming-soon'] = $coming_soon;
-			}
-			$n                 = 0;
-			$installed_plugins = get_plugins();
-			?>
-			<div
-			<?php foreach ( $addons as $addon_id => $addon ) : ?>
-				<?php
-				$addon_info   = $this->fusion_get_plugin_info( $addon['plugin_name'], $installed_plugins );
-				$active_class = '';
-				if ( is_array( $addon_info ) ) {
-					$active_class = ( $addon_info['is_active'] ) ? ' active' : ' installed';
-				}
-				?>
-				<div class="fusion-admin-box">
-					<div class="theme<?php echo esc_html( $active_class ); ?>">
-						<div class="theme-wrapper">
-							<div class="theme-screenshot">
-								<img class="addon-image" src="<?php echo esc_url( $addon['thumbnail'] ); ?>" alt="<?php esc_attr( $addon['post_title'] ); ?>" />
-							</div>
-							<h3 class="theme-name" id="<?php esc_attr( $addon['post_title'] ); ?>">
-								<?php echo ( is_array( $addon_info ) && $addon_info['is_active'] ) ? esc_html__( 'Active:', 'Avada' ) : ''; ?>
-								<?php echo esc_html( ucwords( str_replace( [ 'Fusion Builder ', 'Avada Builder ' ], '', $addon['post_title'] ) ) ); ?>
-								<?php if ( is_array( $addon_info ) ) : ?>
-								<div class="plugin-info">
-										<?php
-										$version = ( isset( $addon_info['Version'] ) ) ? $addon_info['Version'] : false;
-										$author  = ( $addon_info['Author'] && $addon_info['AuthorURI'] ) ? "<a href='{$addon_info['AuthorURI']}' target='_blank'>{$addon_info['Author']}</a>" : false;
-
-										if ( $version && $author ) :
-											/* translators: %1$s: Version. %2$s: Author. */
-											printf( __( 'v%1$s | %2$s', 'Avada' ), $version, $author ); // phpcs:ignore WordPress.Security.EscapeOutput
-										endif;
-										?>
-								</div>
-							<?php endif; ?>
-							</h3>
-							<div class="theme-actions">
-								<?php if ( 'coming-soon' !== $addon_id ) : ?>
-									<?php if ( is_array( $addon_info ) ) : ?>
-										<?php if ( $addon_info['is_active'] ) : ?>
-											<a class="button button-primary" href="<?php echo esc_url( wp_nonce_url( 'plugins.php?action=deactivate&amp;plugin=' . $addon_info['plugin_file'] . '&amp;plugin_status=all&amp;paged=1&amp;s', 'deactivate-plugin_' . $addon_info['plugin_file'] ) ); ?>" target="_blank"><?php esc_html_e( 'Deactivate', 'Avada' ); ?></a>
-										<?php else : ?>
-											<a class="button button-primary" href="<?php echo esc_url( wp_nonce_url( 'plugins.php?action=activate&amp;plugin=' . $addon_info['plugin_file'] . '&amp;plugin_status=all&amp;paged=1&amp;s', 'activate-plugin_' . $addon_info['plugin_file'] ) ); ?>" target="_blank"><?php esc_html_e( 'Activate', 'Avada' ); ?></a>
-										<?php endif; ?>
-									<?php else : ?>
-										<a class="button button-primary button-get-addon" href="<?php echo esc_url( add_query_arg( 'ref', 'ThemeFusion', $addon['url'] ) ); ?>" target="_blank"><?php esc_html_e( 'Get Add-on', 'Avada' ); ?></a>
-									<?php endif; ?>
-								<?php endif; ?>
-
-							</div>
-							<?php if ( isset( $addon['new'] ) && true === $addon['new'] ) : ?>
-								<?php
-								// Show the new badge for first 30 days after release.
-								$now             = time();
-								$date_difference = (int) floor( ( $now - $addon['date'] ) / ( 60 * 60 * 24 ) );
-
-								if ( 30 >= $date_difference ) :
-									?>
-									<div class="plugin-required"><?php esc_html_e( 'New', 'Avada' ); ?></div>
-								<?php endif; ?>
-							<?php endif; ?>
-						</div>
-					</div>
-				</div>
-				<?php $n++; ?>
-			<?php endforeach; ?>
-		</div>
 	</section>
 <?php $this->get_admin_screens_footer(); ?>

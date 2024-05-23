@@ -368,7 +368,7 @@ class Avada_Admin {
 				$plugins_callback = [ $GLOBALS['avada_tgmpa'], 'install_plugins_page' ];
 			}
 
-			$plugins     = $avada_submenu_page_creation_method( 'avada', esc_html__( 'Plugins & Add-ons', 'Avada' ), esc_html__( 'Plugins & Add-ons', 'Avada' ), 'install_plugins', 'avada-plugins', $plugins_callback, 14 );
+			$plugins     = $avada_submenu_page_creation_method( 'avada', esc_html__( 'Plugins', 'Avada' ), esc_html__( 'Plugins', 'Avada' ), 'install_plugins', 'avada-plugins', $plugins_callback, 14 );
 			$maintenance = $avada_submenu_page_creation_method( 'avada', esc_html__( 'Maintenance Mode', 'Avada' ), esc_html__( 'Maintenance Mode', 'Avada' ), 'manage_options', 'themes.php?page=avada_options#heading_maintenance', '', 15 );
 			$performance = $avada_submenu_page_creation_method( 'avada', esc_html__( 'Performance', 'Avada' ), esc_html__( 'Performance', 'Avada' ), 'manage_options', 'avada-performance', [ $this, 'performance_tab' ], 16 );
 			$support     = $avada_submenu_page_creation_method( 'avada', esc_html__( 'Support', 'Avada' ), esc_html__( 'Support', 'Avada' ), 'manage_options', 'avada-support', [ $this, 'support_tab' ], 17 );
@@ -621,8 +621,8 @@ class Avada_Admin {
 										<a class="avada-db-menu-sub-item-link<?php echo ( 'plugins' === $screen ) ? ' avada-db-active' : ''; ?>" href="<?php echo esc_url( ( 'plugins' === $screen ) ? '#' : admin_url( 'admin.php?page=avada-plugins' ) ); ?>">
 											<i class="fusiona-plugins"></i>
 											<div class="avada-db-menu-sub-item-text">
-												<div class="avada-db-menu-sub-item-label"><?php esc_html_e( 'Plugins & Add-ons', 'Avada' ); ?></div>
-												<div class="avada-db-menu-sub-item-desc"><?php esc_html_e( 'Manage plugins & get add-ons.', 'Avada' ); ?></div>
+												<div class="avada-db-menu-sub-item-label"><?php esc_html_e( 'Plugins', 'Avada' ); ?></div>
+												<div class="avada-db-menu-sub-item-desc"><?php esc_html_e( 'Manage plugins.', 'Avada' ); ?></div>
 											</div>
 										</a>
 									</li>

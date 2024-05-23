@@ -1153,6 +1153,43 @@ class Fusion_Dynamic_Data_Callbacks {
 	}
 
 	/**
+	 * ACF get color field.
+	 *
+	 * @static
+	 * @access public
+	 * @since 2.1
+	 * @param array $args Arguments.
+	 * @return string
+	 */
+	public static function acf_get_color_field( $args ) {
+		if ( ! isset( $args['field'] ) ) {
+			return '';
+		}
+
+		$post_id = self::get_post_id();
+		if ( false !== strpos( $post_id, '-archive' ) ) {
+			$color_data = get_field( $args['field'], get_term_by( 'term_taxonomy_id', str_replace( '-archive', '', $post_id ) ) );
+		} else {
+			$color_data = get_field( $args['field'], get_post( $post_id ) );
+		}
+
+		if ( is_array( $color_data ) ) {
+			$defaults = [
+				'red'   => 255,
+				'green' => 255,
+				'blue'  => 255,
+				'alpha' => 1,
+			];
+			$args     = array_merge( $defaults, $color_data );
+			return 'rgba(' . $color_data['red'] . ',' . $color_data['green'] . ',' . $color_data['blue'] . ',' . $color_data['alpha'] . ')';
+		} elseif ( is_string( $color_data ) ) {
+			return $color_data;
+		}
+
+		return '';
+	}
+
+	/**
 	 * ACF get image field.
 	 *
 	 * @static

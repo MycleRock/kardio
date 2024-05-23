@@ -359,7 +359,7 @@ function avada_options_section_performance( $sections ) {
 			],
 			'css_combine_third_party_assets'       => [
 				'label'       => esc_html__( 'Combine Third Party CSS Files', 'Avada' ),
-				'description' => __( 'When enabled, third party CSS files will be combined into Avada\'s main stylesheet. Plugins affected are WooCommerce, The Events Calendar, Slider Revolution, ConvertPlus, Contact Form 7 and bbPress. <strong>IMPORTANT:</strong> Enabling this option is not recommended when you are are using third party file combining services, like cache plugins. <strong>NOTE:</strong> When this option is changed, Avada Caches have to be reset for changes to apply.', 'Avada' ),
+				'description' => __( 'When enabled, third party CSS files will be combined into Avada\'s main stylesheet. Plugins affected are The Events Calendar, Slider Revolution, ConvertPlus, Contact Form 7 and bbPress. <strong>IMPORTANT:</strong> Enabling this option is not recommended when you are are using third party file combining services, like cache plugins. <strong>NOTE:</strong> When this option is changed, Avada Caches have to be reset for changes to apply.', 'Avada' ),
 				'id'          => 'css_combine_third_party_assets',
 				'default'     => '0',
 				'type'        => 'switch',

@@ -105,17 +105,57 @@ class Fusion_Form_List_Table extends WP_List_Table {
 		}
 
 		// Use labels if all fields have unique labels, otherwise use field names.
-		$this->columns = $this->are_labels_valid() ? $this->field_labels : map_deep( $this->field_names, 'Fusion_Builder_Form_Helper::fusion_name_to_label' );
+		$labels = $this->are_labels_valid() ? $this->field_labels : map_deep( $this->field_names, 'Fusion_Builder_Form_Helper::fusion_name_to_label' );
 
 		// We don't need all.
-		$this->columns = array_slice( $this->columns, 0, 7 );
+		$labels = array_slice( $labels, 0, 7 );
 
 		// Add actions column at the end.
 		if ( 0 !== count( $this->form_fields ) ) {
-			array_push( $this->columns, 'Actions' );
+			array_push( $labels, 'Actions' );
+		}
+
+		$this->columns = [
+			'cb' => '<input type="checkbox" />',
+		];
+
+		foreach ( $labels as $key => $label ) {
+			$this->columns[] = $label;
 		}
 
 		$this->no_entries_text = __( 'No form entries submitted yet.', 'fusion-builder' );
+	}
+	/**
+	 *
+	 * Set bulk actions dropdown.
+	 *
+	 * @since 1.0
+	 * @access public
+	 * @return array
+	 */
+	public function get_bulk_actions() {
+
+		$actions = [
+			'awb_bulk_delete_entries' => esc_html__( 'Delete Entries', 'fusion-builder' ),
+		];
+
+		return $actions;
+	}
+
+	/**
+	 * Set checkbox for bulk selection and actions.
+	 *
+	 * @since 1.0
+	 * @access public
+	 * @param  array $item Data.
+	 * @return string
+	 */
+	public function column_cb( $item ) {
+		if ( AWB_Access_Control::wp_user_can_for_post( 'fusion_form', 'delete_others_posts' ) ) {
+			return "<input type='checkbox' name='post[]' value='{$item['awb_id']}' />";
+		}
+
+		return '';
 	}
 
 	/**
@@ -250,6 +290,7 @@ class Fusion_Form_List_Table extends WP_List_Table {
 
 			// Add actions column at the end.
 			$data[ $key ]['Actions'] = $this->column_actions( $data[ $key ], $key );
+			$data[ $key ]['awb_id']  = $key;
 		}
 
 		return $data;

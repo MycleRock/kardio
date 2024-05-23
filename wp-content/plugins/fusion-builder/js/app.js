@@ -1248,7 +1248,7 @@ var FusionPageBuilderEvents = _.extend( {}, Backbone.Events );
 					}
 
 					// Remove image ID if image preview is empty.
-					imageIDField = $uploadButton.parents( '.fusion-builder-option' ).next().find( '#' + $uploadButton.data( 'param' ) + '_id' );
+					imageIDField = $uploadButton.closest( '.fusion-builder-module-settings' ).find( '#' + $uploadButton.data( 'param' ) + '_id' );
 
 					if ( 'element_content' === $uploadButton.data( 'param' ) ) {
 						imageIDField = $uploadButton.parents( '.fusion-builder-option' ).next().find( '#image_id' );
@@ -1538,7 +1538,7 @@ var FusionPageBuilderEvents = _.extend( {}, Backbone.Events );
 							$thisEl.siblings( '.fusion-builder-upload-field' ).val( imageURL ).trigger( 'change' );
 
 							// Set image id.
-							imageIDField = $thisEl.parents( '.fusion-builder-option' ).next().find( '#' + param + '_id' );
+							imageIDField = $thisEl.closest( '.fusion-builder-module-settings' ).find( '#' + param + '_id' );
 
 							if ( 'element_content' === param ) {
 								imageIDField = $thisEl.parents( '.fusion-builder-option' ).next().find( '#image_id' );
@@ -5094,6 +5094,11 @@ var FusionPageBuilderEvents = _.extend( {}, Backbone.Events );
 					if ( ( 'not_contain' === operator || 'doesnt_contain' === operator ) && -1 === current.toString().indexOf( comparison ) ) {
 						return true;
 					}
+					if ( 'is_empty' === operator ) {
+						if ( ! current || '' === current || null === current ) {
+							return true;
+						}
+					}
 					if ( 'is_transparent' === operator ) {
 						if ( 0 === jQuery.AWB_Color( current ).alpha() ) {
 							return true;
@@ -5623,7 +5628,7 @@ var FusionPageBuilderEvents = _.extend( {}, Backbone.Events );
 			FusionPageBuilderEvents.trigger( 'awb-image-upload-url-' + $upload.data( 'param' ), '' );
 
 			// Remove image ID if image is removed.
-			imageIDField = $upload.parents( '.fusion-builder-option' ).next().find( '#' + $upload.data( 'param' ) + '_id' );
+			imageIDField = $upload.closest( '.fusion-builder-module-settings' ).find( '#' + $upload.data( 'param' ) + '_id' );
 
 			if ( 'element_content' === $upload.data( 'param' ) ) {
 				imageIDField = $upload.parents( '.fusion-builder-option' ).next().find( '#image_id' );

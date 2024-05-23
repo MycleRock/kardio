@@ -5,7 +5,7 @@
  * Plugin Name: Fusion Library
  * Plugin URI: https://avada.com
  * Description: Fusion library plugin.
- * Version: 3.11.4
+ * Version: 3.11.7
  * Author: ThemeFusion
  * Author URI: https://avada.com
  * Requires PHP: 5.6
@@ -27,7 +27,7 @@ if ( ! defined( 'FUSION_UPDATES_URL' ) ) {
 	define( 'FUSION_UPDATES_URL', 'https://updates.theme-fusion.com' );
 }
 // Don't use a constant, we need this as a simple var.
-$current_version = '3.11.4';
+$current_version = '3.11.7';
 global $fusion_library_latest_version;
 
 if ( ! $fusion_library_latest_version || version_compare( $current_version, $fusion_library_latest_version ) >= 0 ) {
@@ -81,9 +81,6 @@ require_once FUSION_LIBRARY_PATH . '/inc/fusion-app/compat.php';
 // Include functions.
 require_once FUSION_LIBRARY_PATH . '/inc/functions.php';
 require_once FUSION_LIBRARY_PATH . '/inc/fusion-icon.php';
-if ( file_exists( FUSION_LIBRARY_PATH . '/inc/wc-functions.php' ) ) {
-	include_once FUSION_LIBRARY_PATH . '/inc/wc-functions.php';
-}
 
 // Include helper functions.
 if ( file_exists( FUSION_LIBRARY_PATH . '/inc/fusion-app/helpers.php' ) ) {

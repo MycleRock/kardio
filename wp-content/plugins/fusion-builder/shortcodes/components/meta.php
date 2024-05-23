@@ -415,9 +415,14 @@ if ( fusion_is_element_enabled( 'fusion_tb_meta' ) ) {
 							if ( 'post' === $post_type || isset( $taxonomies[ $post_type ] ) ) {
 								$categories = 'post' === $post_type ? get_the_category_list( ', ', '', $post_id ) : get_the_term_list( $post_id, $taxonomies[ $post_type ], '', ', ' );
 							}
-							/* Translators: %s: List of categories. */
-							$element  = 'no' === $args['display_element_labels'] ? $categories : sprintf( esc_html__( 'Categories: %s', 'fusion-builder' ), $categories );
-							$content .= $categories && ! is_wp_error( $categories ) ? '<span class="fusion-tb-categories">' . $element . '</span>' . $separator : '';
+
+							if ( ! is_wp_error( $categories ) && $categories ) {
+								/* Translators: %s: List of categories. */
+								$element  = 'no' === $args['display_element_labels'] ? $categories : sprintf( esc_html__( 'Categories: %s', 'fusion-builder' ), $categories );
+								$content .= '<span class="fusion-tb-categories">' . $element . '</span>' . $separator;
+							} else {
+								$content .= '';
+							}
 							break;
 						case 'comments':
 							$screen_reader          = '<span class="screen-reader-text"> ' . esc_html__( 'on', 'fusion-builder' ) . ' ' . get_the_title( $post_id ) . '</span>';
@@ -444,9 +449,13 @@ if ( fusion_is_element_enabled( 'fusion_tb_meta' ) ) {
 								$tags = isset( $taxonomies[ $post_type ] ) ? get_the_term_list( $post_id, $taxonomies[ $post_type ], '', ', ', '' ) : get_the_tag_list( '', ', ', '' );
 							}
 
-							/* Translators: %s: List of tags. */
-							$element  = 'no' === $args['display_element_labels'] ? $tags : sprintf( esc_html__( 'Tags: %s', 'fusion-builder' ), $tags );
-							$content .= $tags && ! is_wp_error( $tags ) ? '<span class="fusion-tb-tags">' . $element . '</span>' . $separator : '';
+							if ( ! is_wp_error( $tags ) && $tags ) {
+								/* Translators: %s: List of tags. */
+								$element  = 'no' === $args['display_element_labels'] ? $tags : sprintf( esc_html__( 'Tags: %s', 'fusion-builder' ), $tags );
+								$content .= '<span class="fusion-tb-tags">' . $element . '</span>' . $separator;
+							} else {
+								$content .= '';
+							}
 							break;
 						case 'skills':
 							$skills = '';

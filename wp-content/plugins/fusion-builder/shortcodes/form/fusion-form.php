@@ -530,7 +530,7 @@ if ( fusion_is_element_enabled( 'fusion_form' ) ) {
 					$action = $this->params['form_meta']['post_method_url'];
 					$action = str_replace( '[home_url]', home_url(), $action );
 				}
-				$html .= '<form action="' . $action . '" method="' . $this->params['form_meta']['method'] . '"' . $data_attributes . ' class="' . $class . '"' . $id . $enctype . '>';
+				$html .= '<form action="' . esc_url( $action ) . '" method="' . $this->params['form_meta']['method'] . '"' . $data_attributes . ' class="' . $class . '"' . $id . $enctype . '>';
 
 				/**
 				 * The fusion_form_after_open hook.
@@ -1033,7 +1033,7 @@ if ( fusion_is_element_enabled( 'fusion_form' ) ) {
 					'post_id'           => get_the_ID(),
 					'form_type'         => isset( $this->params['form_meta']['form_type'] ) ? $this->params['form_meta']['form_type'] : '',
 					'confirmation_type' => isset( $this->params['form_meta']['form_confirmation_type'] ) ? $this->params['form_meta']['form_confirmation_type'] : '',
-					'redirect_url'      => isset( $this->params['form_meta']['redirect_url'] ) ? $this->params['form_meta']['redirect_url'] : '',
+					'redirect_url'      => isset( $this->params['form_meta']['redirect_url'] ) ? esc_url( $this->params['form_meta']['redirect_url'] ) : '',
 					'field_labels'      => $fusion_form['field_labels'],
 					'field_logics'      => $fusion_form['field_logics'],
 					'field_types'       => $fusion_form['field_types'],

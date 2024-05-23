@@ -706,15 +706,6 @@ if ( fusion_is_element_enabled( 'fusion_post_cards' ) ) {
 					];
 				}
 
-				// If out of stock are set not to show, hide them.
-				if ( 'product' === $defaults['post_type'] && 'exclude' === $defaults['out_of_stock'] ) {
-					$args['meta_query'][] = [
-						'key'     => '_stock_status',
-						'value'   => 'outofstock',
-						'compare' => 'NOT IN',
-					];
-				}
-
 				// Related items.
 				if ( 'related' === $defaults['source'] ) {
 					$terms = get_the_terms( $post_id, $defaults['terms_by'] );
@@ -729,7 +720,7 @@ if ( fusion_is_element_enabled( 'fusion_post_cards' ) ) {
 						'taxonomy' => $defaults['terms_by'],
 						'field'    => 'slug',
 						'terms'    => $terms,
-					];
+					];					
 				}
 
 				// Cross sells && upsells.
@@ -765,6 +756,15 @@ if ( fusion_is_element_enabled( 'fusion_post_cards' ) ) {
 					];
 				}
 
+				// If out of stock are set not to show, hide them.
+				if ( ( ( 'product' === $defaults['post_type'] && 'posts' === $defaults['source'] ) || ( 'terms' !== $defaults['source'] && 'acf_repeater' !== $defaults['source'] ) ) && 'exclude' === $defaults['out_of_stock'] ) {
+					$args['meta_query'][] = [
+						'key'     => '_stock_status',
+						'value'   => 'outofstock',
+						'compare' => 'NOT IN',
+					];
+				}				
+
 				if ( 'posts' === $defaults['source'] && 'tribe_events' === $defaults['post_type'] ) {
 					if ( 'yes' === $defaults['upcoming_events_only'] ) {
 						$args['ends_after'] = 'now';
@@ -783,12 +783,11 @@ if ( fusion_is_element_enabled( 'fusion_post_cards' ) ) {
 				$args['post_cards_query'] = true;
 
 				if ( 'acf_relationship' === $defaults['source'] && '' !== $defaults['acf_relationship_field'] && class_exists( 'ACF' ) ) {
-					$relation_ship_posts = get_field_object( $defaults['acf_relationship_field'], $post_id, false );
+					$relationship_posts = get_field_object( $defaults['acf_relationship_field'], $post_id, false );
+					$args['post_type']  = isset( $relationship_posts['post_type'] ) ? $relationship_posts['post_type'] : '';
 
-					$args['post_type'] = isset( $relation_ship_posts['post_type'] ) ? $relation_ship_posts['post_type'] : '';
-
-					if ( ! empty( $relation_ship_posts['value'] ) ) {
-						$args['post__in'] = $relation_ship_posts['value'];
+					if ( ! empty( $relationship_posts['value'] ) ) {
+						$args['post__in'] = $relationship_posts['value'];
 					} else {
 						$args['post__in'] = [ 0 ];
 					}
@@ -1018,6 +1017,8 @@ if ( fusion_is_element_enabled( 'fusion_post_cards' ) ) {
 			 * @return void
 			 */
 			public function validate_args() {
+				$this->args['parent_post_id'] = get_the_ID();
+
 				// Force layout for list view.
 				if ( 'product' === $this->args['post_type'] && 'posts' === $this->args['source'] && 'list' === $this->get_product_view() ) {
 					$this->args['layout']  = 'grid';
@@ -1291,7 +1292,15 @@ if ( fusion_is_element_enabled( 'fusion_post_cards' ) ) {
 					$attr['class'] .= ' swiper-slide';
 				}
 
-				if ( 'product' === $this->args['post_type'] && 'posts' === $this->args['source'] ) {
+				$relationship_has_products = false;
+				if ( 'acf_relationship' === $this->args['source'] && '' !== $this->args['acf_relationship_field'] && class_exists( 'ACF' ) ) {
+					$relationship_posts        = get_field_object( $this->args['acf_relationship_field'], $this->args['parent_post_id'], false );
+					$relationship_post_types   = isset( $relationship_posts['post_type'] ) ? $relationship_posts['post_type'] : [];
+					$relationship_has_products = in_array( 'product', $relationship_post_types, true ) && 'product' === get_post_type();
+				}
+
+				$woocommerce_sources = [ 'up_sells', 'cross_sells', 'featured_products' ];
+				if ( ( 'product' === $this->args['post_type'] && 'posts' === $this->args['source'] ) || in_array( $this->args['source'], $woocommerce_sources, true ) || ( 'related' === $this->args['source'] && ( 0 === strpos( $this->args['terms_by'], 'pa_' ) || 0 === strpos( $this->args['terms_by'], 'product_' ) ) ) || $relationship_has_products ) {
 					$attr['class'] .= ' product';
 					$attr['class'] .= ' type-product';
 				}
@@ -2588,14 +2597,14 @@ function fusion_element_post_cards() {
 		'dependency'  => [
 			[
 				'element'  => 'source',
-				'value'    => 'posts',
-				'operator' => '==',
+				'value'    => 'terms',
+				'operator' => '!=',
 			],
 			[
-				'element'  => 'post_type',
-				'value'    => 'product',
-				'operator' => '==',
-			],
+				'element'  => 'source',
+				'value'    => 'acf_repeater',
+				'operator' => '!=',
+			],			
 		],
 		'callback'    => [
 			'function' => 'fusion_ajax',

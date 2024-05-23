@@ -289,6 +289,11 @@ if ( function_exists( 'Fusion_App' ) && Fusion_App()->get_builder_status() ) {
 if ( ! is_admin() && $load_avada_gfonts ) {
 	Avada_Google_Fonts::get_instance();
 }
+
+if ( ! is_admin() ) {
+	AWB_Google_Recaptcha::get_instance();
+}
+
 new Fusion_Dynamic_CSS_From_Options();
 
 /*
@@ -556,7 +561,7 @@ function avada_login_fail( $url = '', $raw_url = '', $user = '' ) {
  */
 function woocommerce_product_archive_description() {
 	if ( is_post_type_archive( 'product' ) && in_array( absint( get_query_var( 'paged' ) ), [ 0, 1 ], true ) ) {
-		$shop_page = get_post( fusion_wc_get_page_id( 'shop' ) );
+		$shop_page = get_post( wc_get_page_id( 'shop' ) );
 		if ( $shop_page ) {
 			$description = apply_filters( 'the_content', $shop_page->post_content );
 			if ( $description ) {

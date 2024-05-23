@@ -81,7 +81,7 @@ function fusion_get_custom_icons_preload_tags() {
 		$wp_filesystem = Fusion_Helper::init_filesystem();
 		foreach ( $icons as $icon ) {
 
-			if ( ! file_exists( FUSION_ICONS_BASE_DIR . $icon['icon_set_dir_name'] . '/style.css' ) ) {
+			if ( ! isset( $icon['icon_set_dir_name'] ) || ! file_exists( FUSION_ICONS_BASE_DIR . $icon['icon_set_dir_name'] . '/style.css' ) ) {
 				continue;
 			}
 

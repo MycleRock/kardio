@@ -1130,6 +1130,9 @@
 .pyre_metabox_tabs a[href^="off_canvas_rules"]:before {
   content: "\e995";
 }
+.pyre_metabox_tabs a[href^="seo"]:before {
+  content: "\e610";
+}
 .pyre_metabox_tabs a:after {
   display: none;
 }

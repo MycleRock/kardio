@@ -984,6 +984,10 @@ var FusionPageBuilder = FusionPageBuilder || {};
 
 				this.values.border_position = 'all' !== this.values.border_position ? '-' + this.values.border_position : '';
 
+				if ( '' === this.values.background_color_hover && '' !== this.values.background_color ) {
+					this.values.background_color_hover = this.values.background_color;
+				}
+
 			},
 
 			validatePercentageMargin: function( value, columnSize, values ) {
@@ -1592,7 +1596,7 @@ var FusionPageBuilder = FusionPageBuilder || {};
 				}
 
 				// Visibility classes.
-				attr = _.fusionVisibilityAtts( this.values.hide_on_mobile, attr );
+				attr[ 'class' ] = _.fusionVisibilityAtts( visibilityValue, attr[ 'class' ] );
 
 				attr[ 'class' ] += _.fusionGetStickyClass( this.values.sticky_display );
 

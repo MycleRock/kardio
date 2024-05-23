@@ -629,6 +629,11 @@ _.mixin( {
 		// Trim the value.
 		value = 'undefined' === typeof value ? '' : value;
 		value = value.toString().trim();
+
+		if ( value.includes( '--awb' ) || value.includes( 'calc(' ) ) {
+			return value;
+		}
+
 		if ( -1 !== jQuery.inArray( value, [ 'auto', 'inherit', 'initial', '' ] ) ) {
 			return value;
 		}
@@ -3037,7 +3042,8 @@ _.mixin( {
 
 				if ( ! _.isUndefined( attributeKeyValue[ 0 ] ) ) {
 					if ( ! _.isUndefined( attributeKeyValue[ 1 ] ) ) {
-						attributeKeyValue[ 1 ] = attributeKeyValue[ 1 ].trim().replace( /{/g, '[' ).replace( /}/g, ']' ).replace( /'/g, '' ).trim();
+						attributeKeyValue[ 1 ] = attributeKeyValue[ 1 ].trim().replace( /{/g, '[' ).replace( /}/g, ']' ).replace( /'/g, '' ).replace( /&/g, '&amp;' ).replace( /</g, '&lt;' ).replace( />/g, '&gt;' ).replace( /"/g, '&quot;' ).trim();
+
 						if ( 'rel' === attributeKeyValue[ 0 ] ) {
 							attr.rel += ' ' + attributeKeyValue[ 1 ];
 						} else if ( 'string' === typeof attr[ attributeKeyValue[ 0 ] ] ) {

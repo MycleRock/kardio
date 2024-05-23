@@ -209,12 +209,12 @@ class PyreThemeFrameworkMetaboxes {
 	 */
 	public static function get_pagetype_tab( $posttype = false ) {
 		$pagetype_data = [
-			'page'              => [ 'page', 'header', 'sliders', 'pagetitlebar', 'content', 'sidebars', 'footer' ],
-			'post'              => [ 'post', 'page', 'header', 'sliders', 'pagetitlebar', 'content', 'sidebars', 'footer' ],
+			'page'              => [ 'page', 'header', 'sliders', 'pagetitlebar', 'content', 'sidebars', 'footer', 'seo' ],
+			'post'              => [ 'post', 'page', 'header', 'sliders', 'pagetitlebar', 'content', 'sidebars', 'footer', 'seo' ],
 			'avada_faq'         => [ 'post', 'page', 'header', 'sliders', 'pagetitlebar', 'content', 'sidebars', 'footer' ],
-			'avada_portfolio'   => [ 'portfolio_post', 'page', 'header', 'sliders', 'pagetitlebar', 'content', 'sidebars', 'footer' ],
-			'product'           => [ 'page', 'header', 'sliders', 'pagetitlebar', 'content', 'sidebars', 'footer' ],
-			'tribe_events'      => [ 'page', 'header', 'sliders', 'pagetitlebar', 'content', 'sidebars', 'footer' ],
+			'avada_portfolio'   => [ 'portfolio_post', 'page', 'header', 'sliders', 'pagetitlebar', 'content', 'sidebars', 'footer', 'seo' ],
+			'product'           => [ 'page', 'header', 'sliders', 'pagetitlebar', 'content', 'sidebars', 'footer', 'seo' ],
+			'tribe_events'      => [ 'page', 'header', 'sliders', 'pagetitlebar', 'content', 'sidebars', 'footer', 'seo' ],
 			'fusion_tb_section' => [ 'template', 'content', 'sidebars' ],
 			'fusion_form'       => [ 'form_general', 'form_appearance', 'form_submission', 'form_notifications', 'form_confirmation', 'form_steps', 'form_privacy' ],
 			'awb_off_canvas'    => [ 'template', 'off_canvas_general', 'off_canvas_design', 'off_canvas_overlay', 'off_canvas_close', 'off_canvas_animation', 'off_canvas_conditions', 'off_canvas_triggers', 'off_canvas_rules' ],
@@ -222,7 +222,7 @@ class PyreThemeFrameworkMetaboxes {
 			'fusion_template'   => [ 'content', 'page', 'fusion_template' ],
 			'post_card'         => [ 'template' ],
 			'mega_menu'         => [ 'template' ],
-			'default'           => [ 'post', 'page', 'header', 'sliders', 'pagetitlebar', 'content', 'sidebars', 'footer' ],
+			'default'           => [ 'post', 'page', 'header', 'sliders', 'pagetitlebar', 'content', 'sidebars', 'footer', 'seo' ],
 		];
 
 		if ( ! isset( $posttype ) || ! $posttype ) {
@@ -661,6 +661,7 @@ class PyreThemeFrameworkMetaboxes {
 			'off_canvas_rules'      => esc_html__( 'Rules', 'Avada' ),
 			'fusion_template'       => esc_html__( 'Template', 'Avada' ),
 			'form_steps'            => esc_html__( 'Step Progress', 'Avada' ),
+			'seo'                   => esc_html__( 'SEO', 'Avada' ),
 		];
 
 		// Set tab name for mega menu.
